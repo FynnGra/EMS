@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- defines that a swipe to the right won't close the app -->
+    <style name="noSwipeToDismiss" parent="@android:style/Theme.DeviceDefault.Light">
+        <item name="android:windowSwipeToDismiss">false</item>
+    </style>
+</resources>
