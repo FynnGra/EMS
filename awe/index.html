@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AR demo</title>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+<meta charset="utf-8"/>
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+}
+#container {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	overflow: hidden;
+}
+</style>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript" src="./js/awe-loader.js"></script>
+<script type="text/javascript">
+
+    awe.init({
+        ready: function() {
+            awe.util.require([ // load js files based on capability detection
+                {
+                    // make sure it supports WebRTC, DeviceOrientation and WebGL
+                    capabilities: ['gum','gyro','webgl'],
+                    files: [
+                        [ 'js/awe-standard-dependencies.js', 'js/awe-standard.js' ], // load standard libs
+                    ],
+                    success: function() {
+                        awe.setup_scene();
+                        // now you can start adding your content here
+                    },
+                },
+            ]);
+        }
+    });
+
+    awe.pois.add({
+        id: 'my_first_poi',
+        position:{
+            x: 100,
+            y: 100,
+            z: 100,
+        },
+    });
+
+    var array_of_pois = awe.pois.list();
+
+    var poi = awe.pois.view({
+        id: 'my_first_poi'
+    });
+
+    awe.projections.add({
+                id: 'my_first_projection',
+                position: { x:1, y:1, z:1 }, // relative to the POIs position
+                geometry: { shape:'cube', x:10, y:10, z:10 },
+                material: { color:0xFFFFFF },
+                texture: { path: "http://192.168.178.76:8081/video.mjpg?q=30&fps=33&id=0.6394992407876998&r=1445876738210" },
+            },
+            {
+                poi_id:'my_first_poi',
+            });
+
+    awe.pois.update({
+        data: {
+            rotation: {
+                y: 45
+            },
+        },
+        where: {
+            id: 'my_first_poi',
+        }
+    });
+
+    awe.projections.update({
+        data: {
+            rotation: {
+                y: 45
+            },
+        },
+        where: {
+            id: 'my_first_projection',
+        }
+    });
+
+    awe.projections.update({
+        data: {
+            rotation: {
+                y: 45
+            },
+            animation: {
+                duration: 3, // seconds
+            },
+        },
+        where: {
+            id: 'my_first_projection',
+        }
+    });
+
+
+
+
+</script>
+</body>
+</html>
