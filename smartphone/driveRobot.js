@@ -1,15 +1,12 @@
 var driveRobot = function(speed, direction)
 {
-    if(!speed || !drirection || isNaN(speed) || isNaN(direction)){
-        console.log("no speed or direction given");
-        return;
-    }
-
     var makeRestPut = function(path, data) {
+        console.log("REST JSON: ", JSON.stringify(data));
+
         $.ajax({
-            url: "http://192.168.1.1:8000/" + path
+            url: "http://192.168.0.11:8000/" + path
             ,type: "PUT"
-            ,data: JSON.stringify(data)
+            ,data: data
             ,success: function() { console.log("REST PUT ", data, " to ", path); }
         });
     };
@@ -29,6 +26,7 @@ var driveRobot = function(speed, direction)
             ,speed: driveData.speed // <speed %, -100 - + 100>
             ,direction: driveData.direction // <direction %, -100 - +100, +100 = turn left>
         };
+        makeRestPut("driveControl", data);
     };
 
     var driveData = {};
@@ -43,6 +41,9 @@ var driveRobot = function(speed, direction)
     else if(direction < -100) driveData.direction = -100;
     else driveData.direction = direction;
 
-    requestDriveControl();
-    setInterval(driveControl(driveData), 100);
+    requestDriveControl(); // call once to change mode
+
+    var interval = 100, timeout = 2000;
+    var drive = setInterval(function(){driveControl(driveData)}, interval); // drive every X ms
+    setTimeout(function(){ clearInterval(drive) }, timeout); // stop driving after X ms
 };
