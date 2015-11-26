@@ -6,7 +6,15 @@ import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.WindowManager;
 
-
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 
 public class MainActivity extends Activity {
@@ -14,17 +22,67 @@ public class MainActivity extends Activity {
     private JoystickView joystick;
     private long timestamp;
     private String token;
+    private OutputStreamWriter requestDriveControlOSW;
+    private OutputStreamWriter driveControlOSW;
+    private InputStreamReader requestDriveControlISR;
+    private InputStreamReader driveControlISR;
+
+
+
+
+    private void initializeRequestDriveControl(){
+        URL url = null;
+        HttpURLConnection connection = null;
+        try{ url = new URL("192.168.1.1:8000/requestDriveControl"); } catch(MalformedURLException e){ Log.e("connectionError", e.getMessage()); }
+        try{ connection = (HttpURLConnection) url.openConnection();} catch(Exception e){ Log.e("connectionError", e.getMessage()); }
+        try{ connection.setRequestMethod("PUT"); } catch(ProtocolException e){ Log.e("connectionError", e.getMessage()); }
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Accept", "application/json");
+
+        OutputStream streamOut = null;
+        try{ streamOut = connection.getOutputStream(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
+        this.requestDriveControlOSW = new OutputStreamWriter(streamOut);
+
+        InputStream streamIn = null;
+        try{ streamIn = connection.getInputStream(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
+        this.requestDriveControlISR = new InputStreamReader(streamIn);
+    }
+
+
+
+    private void initializeDriveControl(){
+        URL url = null;
+        HttpURLConnection connection = null;
+        try{ url = new URL("192.168.1.1:8000/driveControl"); } catch(MalformedURLException e){ Log.e("connectionError", e.getMessage()); }
+        try{ connection = (HttpURLConnection) url.openConnection();} catch(Exception e){ Log.e("connectionError", e.getMessage()); }
+        try{ connection.setRequestMethod("PUT"); } catch(ProtocolException e){ Log.e("connectionError", e.getMessage()); }
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Accept", "application/json");
+
+        OutputStream streamOut = null;
+        try{ streamOut = connection.getOutputStream(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
+        this.driveControlOSW = new OutputStreamWriter(streamOut);
+
+        InputStream streamIn = null;
+        try{ streamIn = connection.getInputStream(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
+        this.driveControlISR = new InputStreamReader(streamIn);
+    }
 
 
 
     private void controlRobot(int angle, int power, int direction){
         Log.i("Joystick: ", "[" + angle + "|" + power + "|" + direction + "]");
 
-        if(System.currentTimeMillis() - timestamp > 300)
-            Log.i("PUT: ", "RequestDriveControl");
+        // Request Drive Control
+        if(System.currentTimeMillis() - timestamp > 300){
+            try{ requestDriveControlOSW.write("{\"token\":" + token + "}"); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
+            try{ requestDriveControlOSW.flush(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
+        }
 
         int roboSpeed = power;
-        int roboDirection;
+        int roboDirection = 0;
 
         // vorwärts
         if(angle < 90 && angle > -90)
@@ -39,8 +97,7 @@ public class MainActivity extends Activity {
                 roboDirection = (180 - angle) * -1;
         }
 
-        // TODO: send PUT request containing roboSpeed, roboDirection and token
-
+        try{ driveControlOSW.write("{\"token\":" + token + ",\"speed\":" + roboSpeed + ",\"direction\":" + roboDirection + "}"); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
         timestamp = System.currentTimeMillis();
     }
 
@@ -60,6 +117,9 @@ public class MainActivity extends Activity {
         timestamp = System.currentTimeMillis();
         token = "macio780";
 
+        initializeRequestDriveControl();
+        initializeDriveControl();
+
         // prevent activity from auto locking the screen
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -77,5 +137,16 @@ public class MainActivity extends Activity {
                 }, 100);
             }
         });
+    }
+
+
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        try{ requestDriveControlOSW.close(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
+        try{ driveControlOSW.close(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
+        try{ requestDriveControlISR.close(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
+        try{ driveControlISR.close(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
     }
 }
