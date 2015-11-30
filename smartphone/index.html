@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style></style>
+    <script language="javascript" type="text/javascript" src="jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="driveRobot.js"></script>
+    <script language="javascript" type="text/javascript" src="sensorSmartphone.js"></script>
+</head>
+
+<body>
+    <div id="test">DeviceOrientation</div>
+    <button id="start">Start</button>
+    <button id="reset">Reset</button>
+    <button id="stop">STOP</button>
+
+    <h2>Device Orientation</h2>
+    <table>
+        <tr>
+            <td>Event Supported</td>
+            <td id="doEvent">xx</td>
+        </tr>
+        <tr>
+            <td>Tilt Left/Right [gamma]</td>
+            <td id="LR">xx</td>
+        </tr>
+        <tr>
+            <td>Tilt Front/Back [beta]</td>
+            <td id="FB">xx</td>
+        </tr>
+        <tr>
+            <td>Direction [alpha]</td>
+            <td id="DIR">xx</td>
+        </tr>
+    </table>
+
+    <h2>Device Acceleration</h2>
+    <table>
+        <tr>
+            <td>Event Supported</td>
+            <td id="xEvent">xx</td>
+        </tr>
+        <tr>
+            <td> </td>
+            <td>withoutGravity</td>
+            <td>withGravity</td>
+            <td>RotationRate</td>
+        </tr>
+        <tr>
+            <td>X</td>
+            <td id="aX">xx</td>
+            <td id="angX">xx</td>
+            <td id="rotX">xx</td>
+        </tr>
+        <tr>
+            <td>Y</td>
+            <td id="aY">xx</td>
+            <td id="angY">xx</td>
+            <td id="rotY">xx</td>
+        </tr>
+        <tr>
+            <td>Z</td>
+            <td id="aZ">xx</td>
+            <td id="angZ">xx</td>
+            <td id="rotZ">xx</td>
+        </tr>
+    </table>
+
+    <div id="sum">0</div>
+</body>
+
+<script>
+    driveRobot(15, 100);
+    //setTimeout(function(){driveRobot(-15, -35)}, 1001);
+</script>
+
+</html>
