@@ -1,0 +1,2 @@
+Der mobile part der App wurde bisher nicht mit Funktion versehen, da diesen Part ja die Ionic App übernehmen soll. 
+Hier befindet sich also lediglich eine leere mobileapp, damit die Build-Skripte nicht durcheinander kommen.

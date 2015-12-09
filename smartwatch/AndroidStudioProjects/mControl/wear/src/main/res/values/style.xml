@@ -3,5 +3,6 @@
     <!-- defines that a swipe to the right won't close the app -->
     <style name="noSwipeToDismiss" parent="@android:style/Theme.DeviceDefault.Light">
         <item name="android:windowSwipeToDismiss">false</item>
+        <!-- <item name="android:windowExitAnimation">@anim/open_on_phone_arrow_animation</item> -->
     </style>
 </resources>
