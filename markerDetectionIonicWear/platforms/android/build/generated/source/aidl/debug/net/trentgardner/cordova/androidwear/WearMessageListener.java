@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: C:\\Users\\Tim\\Desktop\\EMS\\markerDetectionIonic\\platforms\\android\\src\\net\\trentgardner\\cordova\\androidwear\\WearMessageListener.aidl
+ * Original file: C:\\Users\\Tim\\Desktop\\EMS\\markerDetectionIonicWear\\platforms\\android\\src\\net\\trentgardner\\cordova\\androidwear\\WearMessageListener.aidl
  */
 package net.trentgardner.cordova.androidwear;
 public interface WearMessageListener extends android.os.IInterface

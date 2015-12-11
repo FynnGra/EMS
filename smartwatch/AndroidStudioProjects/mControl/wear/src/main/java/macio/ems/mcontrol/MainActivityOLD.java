@@ -1,3 +1,4 @@
+/*
 package macio.ems.mcontrol;
 
 import android.app.Activity;
@@ -28,17 +29,20 @@ public class MainActivity extends Activity{
 
 
 
-    /** internal class for handling the connection asynchronously
+    */
+/** internal class for handling the connection asynchronously
      * AsyncTask<1,2,3>
      * 1: input to doInBackground
      * 2: input in onProgressUpdate
      * 3: return from doInBackground and input to onPostExecute
-     */
+     *//*
+
     private class InitPutConnection extends AsyncTask<String, Void, RestConnection>{
 
         protected void onPreExecute(){
             System.out.println("pre");
-            /*
+            */
+/*
             if(currentConnection != null){
                 if(currentConnection.outputStreamWriter != null){
                     try{ currentConnection.outputStreamWriter.close(); }
@@ -49,11 +53,14 @@ public class MainActivity extends Activity{
                     catch(IOException | NullPointerException e){ Log.e("connectionError", e.getMessage()); }
                 }
             }
-            */
+            *//*
+
         }
 
         protected RestConnection doInBackground(String... restInterfaces) {
-            /*fixme*/System.out.println("doInBackround_begin");
+            */
+/*fixme*//*
+System.out.println("doInBackround_begin");
             URL url = null;
             HttpURLConnection connection = null;
             try{
@@ -73,9 +80,13 @@ public class MainActivity extends Activity{
             InputStream streamIn;
             try{
                 if(connection != null){
-                    /*fixme*/System.out.println("connection is not null");
+                    */
+/*fixme*//*
+System.out.println("connection is not null");
                     streamOut = connection.getOutputStream();
-                    /*fixme*/System.out.println("Why does this output not show up???");
+                    */
+/*fixme*//*
+System.out.println("Why does this output not show up???");
                     streamIn = connection.getInputStream();
                     restConnection.outputStreamWriter = new OutputStreamWriter(streamOut);
                     restConnection.inputStreamReader = new InputStreamReader(streamIn);
@@ -91,7 +102,9 @@ public class MainActivity extends Activity{
         }
 
         protected void onPostExecute(RestConnection restConnection) {
-            /*fixme*/System.out.println("post");
+            */
+/*fixme*//*
+System.out.println("post");
             currentConnection = restConnection;
         }
 
@@ -101,14 +114,22 @@ public class MainActivity extends Activity{
 
     private void controlRobot(int angle, int power, int direction){
         Log.i("Joystick: ", "[" + angle + "|" + power + "|" + direction + "]");
-        /*fixme*/System.out.println(currentConnection);
+        */
+/*fixme*//*
+System.out.println(currentConnection);
         if(currentConnection != null){
-            /*fixme*/System.out.println("currentConnection is not null");
+            */
+/*fixme*//*
+System.out.println("currentConnection is not null");
             // requestDriveControl
             if(System.currentTimeMillis() - timestamp > 300){
-                /*fixme*/System.out.println("mehr als 300ms sind verstrichen");
+                */
+/*fixme*//*
+System.out.println("mehr als 300ms sind verstrichen");
                 if(currentConnection.name.equals("requestDriveControl")){
-                    /*fixme*/System.out.println("requestDriveControl besteht schon");
+                    */
+/*fixme*//*
+System.out.println("requestDriveControl besteht schon");
                     try{
                         currentConnection.outputStreamWriter.write("{\"token\":" + TEST_TOKEN + "}");
                         currentConnection.outputStreamWriter.flush();
@@ -118,14 +139,18 @@ public class MainActivity extends Activity{
                     }
                 }
                 else{
-                    /*fixme*/System.out.println("requestDriveControl besteht noch nicht");
+                    */
+/*fixme*//*
+System.out.println("requestDriveControl besteht noch nicht");
                     new InitPutConnection().execute("requestDriveControl");
                     timestamp = System.currentTimeMillis();
                 }
             }
             // driveControl with existing connection
             else if(currentConnection.name.equals("driveControl")){
-                /*fixme*/System.out.println("driveControl besteht schon");
+                */
+/*fixme*//*
+System.out.println("driveControl besteht schon");
                 int roboSpeed = power;
                 int roboDirection = 0;
 
@@ -150,11 +175,15 @@ public class MainActivity extends Activity{
             }
             // driveControl without existing connection
             else{
-                /*fixme*/System.out.println("driveControl besteht noch nicht");
+                */
+/*fixme*//*
+System.out.println("driveControl besteht noch nicht");
                 new InitPutConnection().execute("driveControl");
             }
         }
-        /*fixme*/System.out.println("controlRobotConditions abgearbeitet");
+        */
+/*fixme*//*
+System.out.println("controlRobotConditions abgearbeitet");
     }
 
 
@@ -205,9 +234,12 @@ public class MainActivity extends Activity{
     @Override
     protected void onStop(){
         super.onStop();
-        /*
+        */
+/*
         try{ currentConnection.outputStreamWriter.close(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
         try{ currentConnection.inputStreamReader.close(); } catch(IOException e){ Log.e("connectionError", e.getMessage()); }
-        */
+        *//*
+
     }
 }
+*/

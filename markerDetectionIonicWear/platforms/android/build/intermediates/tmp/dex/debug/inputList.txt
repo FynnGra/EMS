@@ -1,8 +1,8 @@
-C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\classes\debug
-C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-cec33b0704917b0130baf84fd35ad045ae64618c.jar
-C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\classes-0f6fdce1eebab210f086ce347703a6c2a995a029.jar
-C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\classes-60541a6e722d3e7fa39c8059b6b72493a28df69e.jar
-C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\classes-d90ada6173f94acd114281f74048110a036cc308.jar
-C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-4dd0ea1009f8f16356bba1fb648f3e1d8c199950.jar
-C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\classes-4a80e98347b16d5e1ed1d852fdde554f5bae45e4.jar
-C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\classes-7e273731bcd7061d63179b83278984790f5b13b9.jar
+C:\Users\Tim\Desktop\EMS\markerDetectionIonicWear\platforms\android\build\intermediates\classes\debug
+C:\Users\Tim\Desktop\EMS\markerDetectionIonicWear\platforms\android\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-cec33b0704917b0130baf84fd35ad045ae64618c.jar
+C:\Users\Tim\Desktop\EMS\markerDetectionIonicWear\platforms\android\build\intermediates\pre-dexed\debug\classes-353c28b0dafeafb91242b4b52ac199d87779e93e.jar
+C:\Users\Tim\Desktop\EMS\markerDetectionIonicWear\platforms\android\build\intermediates\pre-dexed\debug\classes-26a060a25a9d44f55a76a9abf4459fcbbc784b5b.jar
+C:\Users\Tim\Desktop\EMS\markerDetectionIonicWear\platforms\android\build\intermediates\pre-dexed\debug\classes-30daf38e00c2ec4245800fd7e653951a152925bc.jar
+C:\Users\Tim\Desktop\EMS\markerDetectionIonicWear\platforms\android\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-1c42516dac5ac4dc2342c87b7bd00292d8ed7d4d.jar
+C:\Users\Tim\Desktop\EMS\markerDetectionIonicWear\platforms\android\build\intermediates\pre-dexed\debug\classes-c6ce8f05c96d2a1e50de154b5124b18e47c3ad4a.jar
+C:\Users\Tim\Desktop\EMS\markerDetectionIonicWear\platforms\android\build\intermediates\pre-dexed\debug\classes-0a6ed61d0c5e5c81e1be30389992e5f765a5f23f.jar

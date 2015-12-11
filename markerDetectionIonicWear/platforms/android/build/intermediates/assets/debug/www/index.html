@@ -6,16 +6,6 @@
     <title>Augmented Reality App</title>
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-
-    <style>
-      #left{
-        float: left;
-      }
-      #right{
-        float: right;
-      }
-    </style>
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
@@ -28,8 +18,6 @@
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
-    <script src="js/lib/three.min.js"></script>
-    <script src="js/lib/JSARToolKit.js"></script>
     <script src="js/appv2.js"></script>
   </head>
   <body ng-app="starter" class="platform-android platform-cordova platform-webview">
@@ -38,8 +26,18 @@
         <h1 class="title">Augmented Reality App</h1>
       </ion-header-bar>
       <ion-content scroll="false" padding="false">
-        <webcamleft-gl id="left"></webcamleft-gl>
-        <webcamright-gl id="right"></webcamright-gl>
+
+        <div class="app">
+          <div id="deviceready" class="blink">
+            <p class="event listening">Connecting to Device</p>
+            <p class="event received">Device is Ready</p>
+          </div>
+
+          <button id="sendMessage">Send Message</button>
+
+          <ul id="events"></ul>
+        </div>
+
       </ion-content>
     </ion-pane>
   </body>

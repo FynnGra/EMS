@@ -40,5 +40,6 @@
             android:onClick="onClick"
             android:background="#FFFFFF"
             android:src="@drawable/wifi_icon" />
+
     </FrameLayout>
 </RelativeLayout>

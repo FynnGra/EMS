@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: C:\\Users\\Tim\\Desktop\\EMS\\markerDetectionIonic\\platforms\\android\\src\\net\\trentgardner\\cordova\\androidwear\\WearMessageApi.aidl
+ * Original file: C:\\Users\\Tim\\Desktop\\EMS\\markerDetectionIonicWear\\platforms\\android\\src\\net\\trentgardner\\cordova\\androidwear\\WearMessageApi.aidl
  */
 package net.trentgardner.cordova.androidwear;
 public interface WearMessageApi extends android.os.IInterface

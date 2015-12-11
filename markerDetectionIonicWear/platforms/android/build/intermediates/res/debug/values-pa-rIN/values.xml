@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- From: file:/C:/Users/Tim/Desktop/EMS/markerDetectionIonic/platforms/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.3.0/res/values-pa-rIN/common_strings.xml -->
+    <!-- From: file:/C:/Users/Tim/Desktop/EMS/markerDetectionIonicWear/platforms/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.3.0/res/values-pa-rIN/common_strings.xml -->
     <eat-comment/>
     <string msgid="6428604800157361567" name="common_android_wear_notification_needs_update_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> ਨੂੰ Android ਵੀਅਰ ਐਪ ਦੇ ਇੱਕ ਅਪਡੇਟ ਦੀ ਲੋੜ ਹੈ।"</string>
     <string msgid="2453027084525739603" name="common_android_wear_update_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> ਨਹੀਂ ਚੱਲੇਗਾ ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ Android ਵੀਅਰ ਐਪ ਨੂੰ ਅਪਡੇਟ ਨਹੀਂ ਕਰਦੇ।"</string>
@@ -32,7 +32,7 @@
     <string msgid="2201289642219771610" name="common_google_play_services_updating_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> Google Play ਸੇਵਾਵਾਂ ਤੋਂ ਬਿਨਾਂ ਨਹੀਂ ਚੱਲੇਗਾ, ਜੋ ਵਰਤਮਾਨ ਵਿੱਚ ਅਪਡੇਟ ਹੋ ਰਹੀਆਂ ਹਨ।"</string>
     <string msgid="815008177440683245" name="common_google_play_services_updating_title">"Google Play ਸੇਵਾਵਾਂ ਅਪਡੇਟ ਹੋ ਰਹੀਆਂ ਹਨ"</string>
     <string msgid="411506735369601515" name="common_open_on_phone">"ਫੋਨ ਤੇ ਖੋਲ੍ਹੋ"</string>
-    <!-- From: file:/C:/Users/Tim/Desktop/EMS/markerDetectionIonic/platforms/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.3.0/res/values-pa-rIN/base_strings.xml -->
+    <!-- From: file:/C:/Users/Tim/Desktop/EMS/markerDetectionIonicWear/platforms/android/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.3.0/res/values-pa-rIN/base_strings.xml -->
     <eat-comment/>
     <string msgid="3156914698180786012" name="common_signin_button_text">"ਸਾਈਨ ਇਨ ਕਰੇ"</string>
     <string msgid="1483290677806110088" name="common_signin_button_text_long">"Google ਨਾਲ ਸਾਈਨ ਇਨ ਕਰੋ"</string>

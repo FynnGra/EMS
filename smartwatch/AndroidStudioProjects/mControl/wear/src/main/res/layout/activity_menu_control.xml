@@ -16,4 +16,14 @@
         android:textSize="2dp"
         android:onClick="onClick" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send!!!"
+        android:id="@+id/sendButton"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:onClick="send" />
+
 </RelativeLayout>
