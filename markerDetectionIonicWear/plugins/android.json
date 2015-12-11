@@ -1,0 +1,33 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.ionicframework.markerdetection2886310"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.ionicframework.markerdetection2886310"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.ionicframework.markerdetection2886310"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.ionicframework.markerdetection2886310"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.ionicframework.markerdetection2886310"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.ionicframework.markerdetection2886310"
+        },
+        "net.trentgardner.cordova.androidwear": {
+            "PACKAGE_NAME": "com.ionicframework.markerdetection2886310"
+        }
+    },
+    "dependent_plugins": {}
+}

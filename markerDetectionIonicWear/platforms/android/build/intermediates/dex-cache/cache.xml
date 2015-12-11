@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\8.3.0\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="01a90bbb9495a8bbf6f3cfdf12f1b35caaa9524b">
+        <dex dex="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\classes-0f6fdce1eebab210f086ce347703a6c2a995a029.jar" />
+    </item>
+    <item
+        jar="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\classes-7e273731bcd7061d63179b83278984790f5b13b9.jar" />
+    </item>
+    <item
+        jar="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-4dd0ea1009f8f16356bba1fb648f3e1d8c199950.jar" />
+    </item>
+    <item
+        jar="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\exploded-aar\android\CordovaLib\unspecified\debug\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="29f2c5e27689f275cf1e2f448475b74f69e251d0">
+        <dex dex="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\classes-60541a6e722d3e7fa39c8059b6b72493a28df69e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\exploded-aar\com.google.android.gms\play-services-wearable\8.3.0\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="9aedc597d74c6d77258ce5236e9abff0c3cc65e3">
+        <dex dex="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\classes-d90ada6173f94acd114281f74048110a036cc308.jar" />
+    </item>
+    <item
+        jar="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\8.3.0\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="345a1b5cf5b144ce18ba6962bc66a7e2f26c1c1b">
+        <dex dex="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\classes-4a80e98347b16d5e1ed1d852fdde554f5bae45e4.jar" />
+    </item>
+    <item
+        jar="C:\Users\Tim\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="C:\Users\Tim\Desktop\EMS\markerDetectionIonic\platforms\android\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-cec33b0704917b0130baf84fd35ad045ae64618c.jar" />
+    </item>
+
+</items>
