@@ -21,9 +21,16 @@
         android:layout_height="wrap_content"
         android:text="Send!!!"
         android:id="@+id/sendButton"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:clickable="true"
-        android:onClick="send" />
+        android:onClick="onClick"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="160dp"
+        android:layout_height="120dp"
+        android:id="@+id/listView"
+        android:layout_below="@+id/sendButton"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

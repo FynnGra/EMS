@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -17,9 +16,8 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
-
-import java.util.Collection;
 import java.util.List;
+
 
 
 public class MenuControl
@@ -27,16 +25,18 @@ public class MenuControl
         implements  View.OnClickListener,
                     MessageApi.MessageListener,
                     ConnectionCallbacks,
-                    OnConnectionFailedListener{
+                    OnConnectionFailedListener {
 
 
 
     GoogleApiClient mGoogleApiClient = null;
-    private static final String MESSAGE_PATH = "/message";
     private String nodeId = null;
 
 
 
+    /**********************************************************************************************
+     ***************************** Android Lifecyle Methods ***************************************
+    **********************************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +58,8 @@ public class MenuControl
         if( mGoogleApiClient != null && !( mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting() ) ){
             mGoogleApiClient.connect();
         }
-        retreiveDeviceNode();
+        this.retreiveDeviceNode();
+        Wearable.MessageApi.addListener(mGoogleApiClient, this);
     }
 
     @Override
@@ -70,10 +71,14 @@ public class MenuControl
     protected void onStop(){
         super.onStop();
         mGoogleApiClient.disconnect();
+        Wearable.MessageApi.removeListener(mGoogleApiClient, this);
     }
 
 
 
+    /**********************************************************************************************
+     ************** Interfaces: ConnectionCallbacks and OnConnectionFailedListener ****************
+     **********************************************************************************************/
     @Override
     public void onConnected(Bundle bundle) {
         // Wearable.MessageApi.addListener(mGoogleApiClient, this);
@@ -91,13 +96,21 @@ public class MenuControl
     }
 
 
-    // obsolet?
+    /**********************************************************************************************
+     *************************** Interface: MessageApi.MessageListener ****************************
+     **********************************************************************************************/
     @Override
-    public void onMessageReceived( final MessageEvent messageEvent ) {
-        Toast.makeText(this, "EMPFANGEN!!!", Toast.LENGTH_SHORT).show();
+    public void onMessageReceived(MessageEvent messageEvent ) {
+        Toast.makeText(this, "EMPFANGEN: " + new String(messageEvent.getData()), Toast.LENGTH_SHORT).show();
+        // String nodeId =  messageEvent.getSourceNodeId();
+        //                  messageEvent.getPath();
     }
 
 
+
+    /**********************************************************************************************
+     *********************************** Helper functions *****************************************
+     **********************************************************************************************/
     private void retreiveDeviceNode(){
 
         new Thread(new Runnable() {
@@ -113,10 +126,7 @@ public class MenuControl
         }).start();
     }
 
-    // onClick
-    public void send(View view){
-        Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId, Constants.MESSAGE_RECEIVED_PATH, null);
-    }
+
 
     public void onClick(View view){
         Intent intent;
@@ -124,6 +134,16 @@ public class MenuControl
             case "backButton":
                 intent = new Intent(MenuControl.this, MainActivity.class);
                 MenuControl.this.startActivity(intent);
+                break;
+            case "sendButton":
+                Wearable.MessageApi.sendMessage(
+                        mGoogleApiClient,
+                        nodeId,
+                        Constants.MESSAGE_PATH,
+                        "Hello from Wear".getBytes());
+                break;
+            default:
+                Log.i("onClick", "unknown View clicked");
         }
     }
 

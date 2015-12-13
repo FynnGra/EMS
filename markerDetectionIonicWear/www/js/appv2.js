@@ -1,8 +1,3 @@
-/*
- * Authors: Tim Schauder & Finn Marquardt
- */
-
-
 //=======================================
 // INIT ANGULAR.JS AND IONIC
 //=======================================
@@ -12,103 +7,86 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic'])
 
-  .run(function($ionicPlatform) {
-    $ionicPlatform.ready(function() {
+  .run(function($ionicPlatform){
+    $ionicPlatform.ready(function(){
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
-      if(window.cordova && window.cordova.plugins.Keyboard) {
+      if(window.cordova && window.cordova.plugins.Keyboard){
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);
       }
 
       ionic.Platform.fullScreen();
-      if(window.StatusBar) {
+      if(window.StatusBar){
         StatusBar.styleDefault();
       }
     });
   });
 
 
-
-
 //=======================================
-// COMMUNICATE WITH WEAR TEST
+// INIT WEAR CONNECTION
 //=======================================
 
-
-
-function watch(handle){
+function watch(nodeId){
   var self = this;
-  AndroidWear.onDataReceived(handle, function(e){
-    self.dataReceived(e.data);
-  });
-  self.handle = handle;
+
+  AndroidWear.onDataReceived(
+    nodeId,
+    function(message){ this.onDataReceivedHandler(message.data) }
+  );
+  self.nodeId = nodeId;
 }
 
 watch.prototype = {
-  dataReceived: function(data){
-    app.logEvent("AndroidWear message received: " + data);
-  },
-  sendMessage: function(message){
-    AndroidWear.sendData(this.handle, message);
-    app.logEvent("AndroidWear message sent!");
+  sendMessage: function(messageString){
+    AndroidWear.sendData(this.nodeId, messageString);
   }
 };
 
+var watchConnection = {
 
+      watch: null,
 
-var app =
-{
-  watch: null,
+      initialize: function(){
+        var self = this;
+        document.addEventListener(
+          'deviceready',
+          function(){ self.onDeviceReady(); },
+          false);
+      },
 
-  initialize: function(){ this.bindEvents(); },
-
-  bindEvents: function()
-  {
-    var self = this;
-    document.addEventListener(
-      'deviceready',
-      function(){ self.onDeviceReady(); },
-      false);
-  },
-
-  onDeviceReady: function(){
-    var self = this;
-    self.receivedEvent('deviceready');
-    if(AndroidWear)
-    {
-      AndroidWear.onConnect(function(e){
-        self.logEvent("AndroidWear connection established");
-        self.watch = new watch(e.handle);
-      });
-    }
-    var sendButton = document.getElementById("sendMessage");
-    sendButton.addEventListener("click", function(){
-      if(self.watch){
-        self.watch.sendMessage("Hello From Cordova!");
+      onDeviceReady: function(){
+        var self = this;
+        if(AndroidWear)
+          AndroidWear.onConnect(
+            function(message){ self.watch = new watch(message.handle); }
+          );
       }
-    });
-  },
 
-  receivedEvent: function(id){
-    var parentElement = document.getElementById(id);
-    var listeningElement = parentElement.querySelector('.listening');
-    var receivedElement = parentElement.querySelector('.received');
-    listeningElement.setAttribute('style', 'display:none;');
-    receivedElement.setAttribute('style', 'display:block;');
-    this.logEvent('Received Event: ' + id);
-  },
-
-  logEvent: function(message){
-    var events = document.getElementById("events");
-    var el = document.createElement("li");
-    el.innerHTML = message;
-    events.appendChild(el);
-  }
 };
 
+watchConnection.initialize();
 
 
-app.initialize();
+
+//=======================================
+// USAGE OF WEAR CONNECTION
+//=======================================
+
+// called when data arrives
+var onDataReceivedHandler = function(messageString){
+  alert("Message Received: " + messageString);
+};
+
+// to send messages: watchConnection.watch.sendMessage("myMessage");
+document.addEventListener("deviceready", function(){
+  document.getElementById("sendButton")
+    .addEventListener("click", function(){
+      if(watchConnection.watch){
+        watchConnection.watch.sendMessage("Hello From Cordova!");
+    }
+  });
+});
 
 

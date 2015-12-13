@@ -1,5 +1,7 @@
 package macio.ems.mcontrol;
 
+// Nicht mehr benötigt, da jetzt Wearable.MessageApi.ListenerService verwendet wird
+
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,9 +17,9 @@ public class WearListenerService
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if( messageEvent.getPath().equalsIgnoreCase(Constants.MESSAGE_RECEIVED_PATH)) {
-            Toast.makeText(this, "RECEIVED!!!", Toast.LENGTH_SHORT).show();
-            Log.i("MessageReceived", Constants.MESSAGE_RECEIVED_PATH);
+        if( messageEvent.getPath().equalsIgnoreCase(Constants.MESSAGE_PATH)) {
+            Toast.makeText(this, "RECEIVED: " + new String(messageEvent.getData()), Toast.LENGTH_SHORT).show();
+            Log.i("MessageReceived", Constants.MESSAGE_PATH);
             // String nodeId =  messageEvent.getSourceNodeId();
             //                  messageEvent.getPath();
             //                  messageEvent.getData()??;
