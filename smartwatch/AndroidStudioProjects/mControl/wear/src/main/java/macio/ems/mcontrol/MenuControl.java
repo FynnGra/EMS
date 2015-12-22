@@ -1,5 +1,7 @@
 package macio.ems.mcontrol;
 
+
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
@@ -29,7 +31,11 @@ public class MenuControl
 
 
 
-    GoogleApiClient mGoogleApiClient = null;
+    private FragmentManager fragmentManager = null;
+    private MenuFragment menuFragment = null;
+    private JoystickFragment joystickFragment = null;
+    private boolean fragmentFlag = false;
+    private GoogleApiClient mGoogleApiClient = null;
     private String nodeId = null;
 
 
@@ -41,8 +47,12 @@ public class MenuControl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_control);
+
         // prevent activity from auto locking the screen
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        // false = currently no Fragment attached
+        fragmentFlag = false;
 
         mGoogleApiClient = new GoogleApiClient.Builder( this )
                 .addApi( Wearable.API )
@@ -55,11 +65,17 @@ public class MenuControl
     protected void onStart(){
         super.onStart();
 
+        // initialize Wear Connection
         if( mGoogleApiClient != null && !( mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting() ) ){
             mGoogleApiClient.connect();
         }
         this.retreiveDeviceNode();
         Wearable.MessageApi.addListener(mGoogleApiClient, this);
+
+        // initialize Fragments
+        fragmentManager = getFragmentManager();
+        menuFragment = new MenuFragment();
+        joystickFragment = new JoystickFragment();
     }
 
     @Override
@@ -96,14 +112,99 @@ public class MenuControl
     }
 
 
+
     /**********************************************************************************************
-     *************************** Interface: MessageApi.MessageListener ****************************
+     ************************************ Message API *********************************************
      **********************************************************************************************/
     @Override
     public void onMessageReceived(MessageEvent messageEvent ) {
-        Toast.makeText(this, "EMPFANGEN: " + new String(messageEvent.getData()), Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "EMPFANGEN: " + new String(messageEvent.getData()), Toast.LENGTH_SHORT).show();
         // String nodeId =  messageEvent.getSourceNodeId();
         //                  messageEvent.getPath();
+
+        String message = new String(messageEvent.getData());
+        switch(message){
+            case "menu":
+                showMenuFragment();
+                break;
+            case "joystick":
+                showJoystickFragment();
+                break;
+            case "close":
+                closeFragment();
+                break;
+            default:
+                Toast.makeText(this, "unknown message", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+
+    public void sendString(String s) {
+        Wearable.MessageApi.sendMessage(
+                mGoogleApiClient,
+                nodeId,
+                Constants.MESSAGE_PATH,
+                s.getBytes());
+    }
+
+
+
+    /**********************************************************************************************
+     *************************************** Fragment Stuff ***************************************
+     **********************************************************************************************/
+    public void showMenuFragment() {
+        if(fragmentFlag){
+            if(!(fragmentManager.findFragmentByTag("frag") instanceof MenuFragment)){
+                Log.i("Fragment", "replaced");
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragmentLayout, menuFragment, "frag")
+                        .commit();
+            }
+        }
+        else{
+            Log.i("Fragment", "added");
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragmentLayout, menuFragment, "frag")
+                    .commit();
+        }
+        fragmentFlag = true;
+    }
+
+    public void showJoystickFragment() {
+        if(fragmentFlag){
+            if(!(fragmentManager.findFragmentByTag("frag") instanceof JoystickFragment)){
+                Log.i("Fragment", "replaced");
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragmentLayout, joystickFragment, "frag")
+                        .commit();
+            }
+        }
+        else{
+            Log.i("Fragment", "added");
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragmentLayout, joystickFragment, "frag")
+                    .commit();
+        }
+        fragmentFlag = true;
+    }
+
+
+
+    public void closeFragment() {
+        if(fragmentFlag) {
+            Log.i("Fragment", "closed");
+            fragmentManager
+                    .beginTransaction()
+                    .remove(fragmentManager.findFragmentByTag("frag"))
+                    .commit();
+            fragmentFlag = false;
+        }
     }
 
 
@@ -136,11 +237,7 @@ public class MenuControl
                 MenuControl.this.startActivity(intent);
                 break;
             case "sendButton":
-                Wearable.MessageApi.sendMessage(
-                        mGoogleApiClient,
-                        nodeId,
-                        Constants.MESSAGE_PATH,
-                        "Hello from Wear".getBytes());
+                sendString("Hello from Wear!!");
                 break;
             default:
                 Log.i("onClick", "unknown View clicked");

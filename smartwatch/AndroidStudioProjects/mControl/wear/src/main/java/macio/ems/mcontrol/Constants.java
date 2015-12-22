@@ -9,4 +9,7 @@ public class Constants {
 
     public static final String MESSAGE_PATH = "net.trentgardner.cordova.androidwear.NewMessage";
 
+    public static final float TAP_THRESHOLD = 5;
+    public static final float DRIVE_MAX_SPEED = 50;
+
 }
