@@ -81,12 +81,34 @@ var onDataReceivedHandler = function(messageString){
 
 // to send messages: watchConnection.watch.sendMessage("myMessage");
 document.addEventListener("deviceready", function(){
+
   document.getElementById("sendButton")
     .addEventListener("click", function(){
       if(watchConnection.watch){
         watchConnection.watch.sendMessage("Hello From Cordova!");
     }
   });
+
+  document.getElementById("menu")
+    .addEventListener("click", function(){
+      if(watchConnection.watch){
+        watchConnection.watch.sendMessage("menu");
+      }
+    });
+
+  document.getElementById("joystick")
+    .addEventListener("click", function(){
+      if(watchConnection.watch){
+        watchConnection.watch.sendMessage("joystick");
+      }
+    });
+
+  document.getElementById("close")
+    .addEventListener("click", function(){
+      if(watchConnection.watch){
+        watchConnection.watch.sendMessage("close");
+      }
+    });
 });
 
 
