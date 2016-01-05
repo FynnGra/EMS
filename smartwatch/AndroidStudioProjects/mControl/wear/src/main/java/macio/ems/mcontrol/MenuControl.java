@@ -32,9 +32,13 @@ public class MenuControl
 
 
     private FragmentManager fragmentManager = null;
+    private boolean fragmentFlag = false;
+
     private MenuFragment menuFragment = null;
     private JoystickFragment joystickFragment = null;
-    private boolean fragmentFlag = false;
+    private CockpitFragment cockpitFragment = null;
+    private AutoFragment autoFragment = null;
+
     private GoogleApiClient mGoogleApiClient = null;
     private String nodeId = null;
 
@@ -76,6 +80,19 @@ public class MenuControl
         fragmentManager = getFragmentManager();
         menuFragment = new MenuFragment();
         joystickFragment = new JoystickFragment();
+        cockpitFragment = new CockpitFragment();
+        autoFragment = new AutoFragment();
+
+
+        this.findViewById(R.id.backactivity).setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        closeFragment();
+                        sendString("close");
+                    }
+                }
+        );
+
     }
 
     @Override
@@ -86,6 +103,8 @@ public class MenuControl
     @Override
     protected void onStop(){
         super.onStop();
+        // sendString("close");
+
         mGoogleApiClient.disconnect();
         Wearable.MessageApi.removeListener(mGoogleApiClient, this);
     }
@@ -130,8 +149,11 @@ public class MenuControl
             case "joystick":
                 showJoystickFragment();
                 break;
-            case "close":
-                closeFragment();
+            case "cockpit":
+                showCockpitFragment();
+                break;
+            case "auto":
+                showAutoFragrment();
                 break;
             default:
                 Toast.makeText(this, "unknown message", Toast.LENGTH_SHORT).show();
@@ -196,6 +218,50 @@ public class MenuControl
 
 
 
+    public void showCockpitFragment() {
+        if(fragmentFlag){
+            if(!(fragmentManager.findFragmentByTag("frag") instanceof CockpitFragment)){
+                Log.i("Fragment", "replaced");
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragmentLayout, cockpitFragment, "frag")
+                        .commit();
+            }
+        }
+        else{
+            Log.i("Fragment", "added");
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragmentLayout, cockpitFragment, "frag")
+                    .commit();
+        }
+        fragmentFlag = true;
+    }
+
+
+
+    public void showAutoFragrment() {
+        if(fragmentFlag){
+            if(!(fragmentManager.findFragmentByTag("frag") instanceof AutoFragment)){
+                Log.i("Fragment", "replaced");
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragmentLayout, autoFragment, "frag")
+                        .commit();
+            }
+        }
+        else{
+            Log.i("Fragment", "added");
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragmentLayout, autoFragment, "frag")
+                    .commit();
+        }
+        fragmentFlag = true;
+    }
+
+
+
     public void closeFragment() {
         if(fragmentFlag) {
             Log.i("Fragment", "closed");
@@ -230,15 +296,7 @@ public class MenuControl
 
 
     public void onClick(View view){
-        Intent intent;
         switch( getResources().getResourceEntryName(view.getId()) ) {
-            case "backButton":
-                intent = new Intent(MenuControl.this, MainActivity.class);
-                MenuControl.this.startActivity(intent);
-                break;
-            case "sendButton":
-                sendString("Hello from Wear!!");
-                break;
             default:
                 Log.i("onClick", "unknown View clicked");
         }

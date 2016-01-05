@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:deviceIds="wear_round"
-    style="@style/noSwipeToDismiss">
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/menu"
+        android:id="@+id/auto"
         android:layout_centerVertical="true"
-        android:src="@drawable/menu"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/auto" />
 
     <Button
         android:layout_width="20dp"
         android:layout_height="320dp"
-        android:id="@+id/backmenu"
+        android:id="@+id/backauto"
         android:background="#DDDDDD"
         android:text="back"
         android:translationZ="5dp"
@@ -28,5 +21,4 @@
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
         android:clickable="true" />
-
 </RelativeLayout>

@@ -358,6 +358,7 @@ var select = new THREE.Mesh(
 select.position.x = -60;
 
 //TESTAREA START
+/*
 document.onkeydown = function(e) {
   e = e || window.event;
   switch(e.which || e.keyCode) {
@@ -394,7 +395,52 @@ document.onkeydown = function(e) {
   videoScene.matrixWorldNeedsUpdate = true;
   e.preventDefault(); // prevent the default action (scroll / move caret)
 };
+*/
+
+var onDataReceivedHandler = function(messageString){
+  switch(messageString) {
+    case "menu|up":
+      if(selectCounter > 0) {
+        select.position.y = selectPosition + 35;
+        selectPosition = select.position.y;
+        selectCounter--;
+      }
+      break;
+
+    case "menu|down":
+      if(selectCounter < (quantity - 1)) {
+        select.position.y = selectPosition - 35;
+        selectPosition = select.position.y;
+        selectCounter++;
+      }
+      break;
+
+    case "menu|tap":
+      selectedMode = selectCounter;
+      switch (selectCounter) {
+        case 0:
+          watchConnection.watch.sendMessage("auto");
+          break;
+        case 1:
+          watchConnection.watch.sendMessage("joystick");
+          break;
+        case 2:
+          watchConnection.watch.sendMessage("cockpit");
+          break;
+      }
+      break;
+
+    case "close":
+      WearMenuOpened = false;
+      break;
+
+    default: return; // exit this handler for other keys
+  }
+};
+
 //TESTAREA END
+
+var WearMenuOpened = false;
 
 window.setInterval(function() {
   // Draw the video frame to the canvas.
@@ -454,6 +500,12 @@ window.setInterval(function() {
   //Add a cube 3D object for each detected marker.
   for (i in markers)
   {
+    if(!WearMenuOpened){
+      watchConnection.watch.sendMessage("menu");
+      // alert("test");
+      WearMenuOpened = true;
+    }
+
     var m = markers[i];
 
     if (!m.model) {
@@ -652,3 +704,65 @@ angular.module('starter', ['ionic'])
       }, 20);
     }
   }]);
+
+
+
+//=======================================
+// INIT WEAR CONNECTION
+//=======================================
+
+function watch(nodeId){
+  var self = this;
+
+  AndroidWear.onDataReceived(
+    nodeId,
+    function(message){ this.onDataReceivedHandler(message.data) }
+  );
+  self.nodeId = nodeId;
+}
+
+watch.prototype = {
+  sendMessage: function(messageString){
+    AndroidWear.sendData(this.nodeId, messageString);
+  }
+};
+
+var watchConnection = {
+
+  watch: null,
+
+  initialize: function(){
+    var self = this;
+    document.addEventListener(
+      'deviceready',
+      function(){ self.onDeviceReady(); },
+      false);
+  },
+
+  onDeviceReady: function(){
+    var self = this;
+    if(AndroidWear)
+      AndroidWear.onConnect(
+        function(message){ self.watch = new watch(message.handle); }
+      );
+  }
+
+};
+
+watchConnection.initialize();
+
+
+
+//=======================================
+// USAGE OF WEAR CONNECTION
+//=======================================
+
+// called when data arrives
+/*
+var onDataReceivedHandler = function(messageString){
+  alert("Message Received: " + messageString);
+};
+*/
+
+// to send messages: watchConnection.watch.sendMessage("myMessage");
+
