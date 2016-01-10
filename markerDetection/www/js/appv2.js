@@ -100,8 +100,8 @@ watchConnection.initialize();
 
 //Initialize video camera
 var video = document.createElement('video');
-var width = 320; //1280(unstable) - 960 - 640 - 320(bad marker detection)
-var height = 240; //720(unstable) - 540 - 480 - 240(bad marker detection)
+var width = 640; //1280(unstable) - 960 - 640 - 320(bad marker detection)
+var height = 480; //720(unstable) - 540 - 480 - 240(bad marker detection)
 
 video.width = width;
 video.height = height;
@@ -604,6 +604,15 @@ function setSelectPosition(_model){
 }
 //TESTAREA END
 
+var WearMenuOpened = false;
+var openWatchMenu = function() {
+  if(!WearMenuOpened){
+    watchConnection.watch.sendMessage("menu");
+    // alert("test");
+    WearMenuOpened = true;
+  }
+};
+
 window.setInterval(function() {
   // Draw the video frame to the canvas.
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -671,7 +680,8 @@ window.setInterval(function() {
       m.model.matrixAutoUpdate = false;
 
       if(markers[0]) {
-        quantity = 4;
+        openWatchMenu();
+        quantity = 3;
         //RIGHTSIDE List with selection
         for (var i = 0; i < quantity; i++) {
           if(selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({map: activeSelectionPics[i], transparent: true}));
@@ -740,6 +750,7 @@ window.setInterval(function() {
       }
 
       if(markers[64]){
+        openWatchMenu();
         quantity = 2;
 
         for (var i = 0; i < quantity; i++) {
