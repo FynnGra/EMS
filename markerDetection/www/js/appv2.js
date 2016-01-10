@@ -9,6 +9,84 @@
  *          http://threejs.org/docs/
  *          https://docs.angularjs.org/guide
  *
+ * Version: 3.1
+ *
+ * Date:    10.01.2015
+ *
+ * Authors: Eduard Boitschenko & Fynn Grandke
+ */
+
+
+//=======================================
+// INIT WEAR CONNECTION
+//=======================================
+
+function watch(nodeId){
+  var self = this;
+
+  AndroidWear.onDataReceived(
+    nodeId,
+    function(message){ this.onDataReceivedHandler(message.data) }
+  );
+  self.nodeId = nodeId;
+}
+
+watch.prototype = {
+  sendMessage: function(messageString){
+    AndroidWear.sendData(this.nodeId, messageString);
+  }
+};
+
+var watchConnection = {
+
+  watch: null,
+
+  initialize: function(){
+    var self = this;
+    document.addEventListener(
+      'deviceready',
+      function(){ self.onDeviceReady(); },
+      false);
+  },
+
+  onDeviceReady: function(){
+    var self = this;
+    if(AndroidWear)
+      AndroidWear.onConnect(
+        function(message){ self.watch = new watch(message.handle); }
+      );
+  }
+
+};
+
+watchConnection.initialize();
+
+
+
+//=======================================
+// USAGE OF WEAR CONNECTION
+//=======================================
+
+// called when data arrives
+/*
+ var onDataReceivedHandler = function(messageString){
+ alert("Message Received: " + messageString);
+ };
+ */
+
+// to send messages: watchConnection.watch.sendMessage("myMessage");
+
+/*
+ * Description: Web based augmented reality application using WebGL/WebRTC, JSARToolKit, THREE.js
+ *              and the Ionic framework.
+ *
+ *
+ * Sources: http://www.html5rocks.com/en/tutorials/webgl/jsartoolkit_webrtc/
+ *          http://www.html5rocks.com/en/tutorials/getusermedia/intro/
+ *          https://github.com/kig/JSARToolKit
+ *          http://threejs.org/docs/
+ *          https://docs.angularjs.org/guide
+ *
  * Version: 2.0
  *
  * Date:    06.12.2015
@@ -200,16 +278,16 @@ var videoCam = new THREE.Camera();
 videoScene.add(plane);
 videoScene.add(videoCam);
 
-crosshair = new THREE.Mesh(
-  new THREE.RingGeometry( 0.02, 0.05, 32 ),
-  new THREE.MeshBasicMaterial( {
-    color: 0xFF0000,
-    transparent: true,
-    opacity: 0.5
-  })
-);
-// Set circle
-videoScene.add( crosshair );
+/*
+ crosshair = new THREE.Mesh(
+ new THREE.BoxGeometry( 0.02, 0.02, 1 ),
+ new THREE.MeshBasicMaterial( {
+ color: 0x000000,
+ transparent: true,
+ opacity: 0.5
+ })
+ );
+ */
 
 // TESTAREA START
 var textArray = [];
@@ -238,7 +316,7 @@ var canvasAuto = document.createElement('canvas');
 canvasAuto.width = 1000;
 canvasAuto.height = 500;
 
-// draw the score of "mode" to the canvas
+// draw the score of "auto" to the canvas
 var contextAuto = canvasAuto.getContext('2d');
 contextAuto.font = "Bold 200px Helvetica";
 contextAuto.fillStyle = "rgba(255,255,255,0.95)";
@@ -253,22 +331,22 @@ var materialAuto = new THREE.MeshBasicMaterial( {
   transparent: true
 } );
 
-var canvasManuell = document.createElement('canvas');
-canvasManuell.width = 1000;
-canvasManuell.height = 500;
+var canvasManual = document.createElement('canvas');
+canvasManual.width = 1000;
+canvasManual.height = 500;
 
-// draw the score of "mode" to the canvas
-var contextManuell = canvasManuell.getContext('2d');
-contextManuell.font = "Bold 200px Helvetica";
-contextManuell.fillStyle = "rgba(255,255,255,0.95)";
-contextManuell.fillText('manuell', 0, 300);
+// draw the score of "manual" to the canvas
+var contextManual = canvasManual.getContext('2d');
+contextManual.font = "Bold 200px Helvetica";
+contextManual.fillStyle = "rgba(255,255,255,0.95)";
+contextManual.fillText('manual', 0, 300);
 
 // use canvas contents as a texture
-var textureManuell = new THREE.Texture(canvasManuell);
-textureManuell.needsUpdate = true;
+var textureManual = new THREE.Texture(canvasManual);
+textureManual.needsUpdate = true;
 
-var materialManuell = new THREE.MeshBasicMaterial( {
-  map: textureManuell,
+var materialManual = new THREE.MeshBasicMaterial( {
+  map: textureManual,
   transparent: true
 } );
 
@@ -276,7 +354,7 @@ var canvasCockpit = document.createElement('canvas');
 canvasCockpit.width = 1000;
 canvasCockpit.height = 500;
 
-// draw the score of "mode" to the canvas
+// draw the score of "cockpit" to the canvas
 var contextCockpit = canvasCockpit.getContext('2d');
 contextCockpit.font = "Bold 200px Helvetica";
 contextCockpit.fillStyle = "rgba(255,255,255,0.95)";
@@ -292,7 +370,7 @@ var materialCockpit = new THREE.MeshBasicMaterial( {
 } );
 
 textArray.push(materialAuto);
-textArray.push(materialManuell);
+textArray.push(materialManual);
 textArray.push(materialCockpit);
 // TESTAREA END
 
@@ -300,19 +378,24 @@ textArray.push(materialCockpit);
 //Array for the detected markers.
 var markers = {};
 
-var quantity = 3,
-    position,
-    selectPosition = (quantity - 3) * 35,
-    selectCounter,
-    selectedMode = 0;
+var size = 2;
+
+var quantity,
+  position,
+  selectPosition,
+  selectCounter,
+  selectedMode = 0;
+
+var xShift = 120;
+
 //Array for the created cubes, not used so far
 var objects = [];
 //Textures for the created cubes
 var textures = [];
 var texture0 = THREE.ImageUtils.loadTexture("img/testjpg.jpg"),
-    texture1 = THREE.ImageUtils.loadTexture("img/ionic.png"),
-    texture2 = THREE.ImageUtils.loadTexture("img/testpng.png"),
-    texture3 = THREE.ImageUtils.loadTexture("img/icon_battery_0.svg");
+  texture1 = THREE.ImageUtils.loadTexture("img/ionic.png"),
+  texture2 = THREE.ImageUtils.loadTexture("img/testpng.png"),
+  texture3 = THREE.ImageUtils.loadTexture("img/icon_battery_0.svg");
 
 textures.push(texture0);
 textures.push(texture1);
@@ -324,10 +407,10 @@ var batteryCall = 0;
 
 var batteryState = [];
 var batteryTexture0 = THREE.ImageUtils.loadTexture("img/icon_battery_error.svg"),
-    batteryTexture1 = THREE.ImageUtils.loadTexture("img/icon_battery_0.svg"),
-    batteryTexture2 = THREE.ImageUtils.loadTexture("img/icon_battery_1.svg"),
-    batteryTexture3 = THREE.ImageUtils.loadTexture("img/icon_battery_2.svg"),
-    batteryTexture4 = THREE.ImageUtils.loadTexture("img/icon_battery_3.svg");
+  batteryTexture1 = THREE.ImageUtils.loadTexture("img/icon_battery_0.svg"),
+  batteryTexture2 = THREE.ImageUtils.loadTexture("img/icon_battery_1.svg"),
+  batteryTexture3 = THREE.ImageUtils.loadTexture("img/icon_battery_2.svg"),
+  batteryTexture4 = THREE.ImageUtils.loadTexture("img/icon_battery_3.svg");
 
 batteryState.push(batteryTexture0);
 batteryState.push(batteryTexture1);
@@ -336,26 +419,32 @@ batteryState.push(batteryTexture3);
 batteryState.push(batteryTexture4);
 
 var selectionPics = [];
+var activeSelectionPics = [];
 var selectionTexture0 = THREE.ImageUtils.loadTexture("img/icon_automatisch_inaktiv.svg"),
-    selectionTexture3 = THREE.ImageUtils.loadTexture("img/icon_automatisch_selected.svg"),
-    selectionTexture1 = THREE.ImageUtils.loadTexture("img/icon_manuell_inaktiv.svg"),
-    selectionTexture4 = THREE.ImageUtils.loadTexture("img/icon_manuell_selected.svg"),
-    selectionTexture2 = THREE.ImageUtils.loadTexture("img/icon_cockpit_inaktiv.svg"),
-    selectionTexture5 = THREE.ImageUtils.loadTexture("img/icon_cockpit_aktiv.svg");
+  selectionTexture1 = THREE.ImageUtils.loadTexture("img/icon_manuell_inaktiv.svg"),
+  selectionTexture2 = THREE.ImageUtils.loadTexture("img/icon_cockpit_inaktiv.svg");
+
+var activeSelectionTexture0 = THREE.ImageUtils.loadTexture("img/icon_automatisch_selected.svg"),
+  activeSelectionTexture1 = THREE.ImageUtils.loadTexture("img/icon_manuell_selected.svg"),
+  activeSelectionTexture2 = THREE.ImageUtils.loadTexture("img/icon_cockpit_aktiv.svg");
 
 selectionPics.push(selectionTexture0);
 selectionPics.push(selectionTexture1);
 selectionPics.push(selectionTexture2);
-selectionPics.push(selectionTexture3);
-selectionPics.push(selectionTexture4);
-selectionPics.push(selectionTexture5);
+
+activeSelectionPics.push(activeSelectionTexture0);
+activeSelectionPics.push(activeSelectionTexture1);
+activeSelectionPics.push(activeSelectionTexture2);
+
 
 var select = new THREE.Mesh(
-  new THREE.RingGeometry( 2, 5, 32 ),
+  new THREE.BoxGeometry( 15 * size, 30 * size, 1 ),
   new THREE.MeshBasicMaterial({
-    color: 0x00FF00
+    color: 0x000000,
+    transparent: true,
+    opacity: 0.75
   }));
-select.position.x = -60;
+select.position.x = xShift * size + 60 * size;
 
 //TESTAREA START
 /*
@@ -364,7 +453,7 @@ document.onkeydown = function(e) {
   switch(e.which || e.keyCode) {
     case 38: // up
       if(selectCounter > 0) {
-        select.position.y = selectPosition + 35;
+        select.position.y = selectPosition * size + 35 * size;
         selectPosition = select.position.y;
         selectCounter--;
       }
@@ -372,7 +461,7 @@ document.onkeydown = function(e) {
 
     case 40: // down
       if(selectCounter < (quantity - 1)) {
-        select.position.y = selectPosition - 35;
+        select.position.y = selectPosition * size - 35 * size;
         selectPosition = select.position.y;
         selectCounter++;
       }
@@ -438,9 +527,82 @@ var onDataReceivedHandler = function(messageString){
   }
 };
 
-//TESTAREA END
 
-var WearMenuOpened = false;
+
+var geometry = new THREE.BoxGeometry(100 * size, 30 * size, 1);
+
+function createList(_model, _i, _object, _specificText, _specificText2){
+
+  var objectBackground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 0x000000, transparent: true, opacity: 0.75}));
+
+  if (quantity % 2 == 0) {
+    if (_i == 0) position = 0;
+    if (!((_i + 1) % 2 == 0)) {
+      _object.position.y = position * size;
+      objectBackground.position.y = position * size;
+      _specificText2.position.y = position * size - 2 * size;
+      _specificText.position.y = position + 2;
+    }
+    else {
+      _object.position.y = (-1) * position * size;
+      objectBackground.position.y = (-1) * position * size;
+      _specificText2.position.y = (-1) * position * size - 2 * size;
+      _specificText.position.y = (-1) * position * size + 2 * size;
+    }
+    if (!((_i + 1) % 2 == 0)) position += 35;
+  } else {
+    if (_i == 0) {
+      _object.position.y = 35 * size;
+      objectBackground.position.y = 35 * size;
+      _specificText2.position.y = 33 * size;
+      _specificText.position.y = 37 * size;
+      position = 0;
+    }
+    else {
+      if ((_i + 1) % 2 == 0) {
+        _object.position.y = position * size;
+        objectBackground.position.y = position * size;
+        _specificText2.position.y = position * size - 2 * size;
+        _specificText.position.y = position * size + 2 * size;
+      }
+      else {
+        _object.position.y = (-1) * position * size;
+        objectBackground.position.y = (-1) * position * size;
+        _specificText2.position.y = (-1) * position * size - 2 * size;
+        _specificText.position.y = (-1) * position * size + 2 * size;
+      }
+      if ((_i + 1) % 2 == 0) position += 35;
+    }
+  }
+  //position = position*2;
+  // AXIS both x and y
+  //object.lookAt(scene.position);
+  _specificText2.position.x = xShift * size;
+  _specificText2.position.z = -22;
+  _specificText.position.x = xShift * size + 10 * size;
+  _specificText.position.z = -28;
+  _object.position.x = xShift * size - 35 * size;
+  _object.position.z = -20;
+  objectBackground.position.x = xShift * size;
+  objectBackground.position.z = -18;
+  //objects.push(object);
+  _model.add(objectBackground);
+  _model.add(_object);
+  _model.add(_specificText2);
+  _model.add(_specificText);
+}
+
+function setSelectPosition(_model){
+  if(quantity > 3) selectPosition = (quantity - 3) * 35;
+  else if(quantity == 3 || quantity == 1) selectPosition = 35;
+  else selectPosition = 0;
+
+  select.position.y = selectPosition * size;
+  select.position.z = -18;
+  selectCounter = 0;
+  _model.add(select);
+}
+//TESTAREA END
 
 window.setInterval(function() {
   // Draw the video frame to the canvas.
@@ -489,112 +651,41 @@ window.setInterval(function() {
   {
     var r = markers[i];
     if (r.age > 1) {
-      videoScene.add(crosshair);
-      crosshair.material.color.setHex( 0xFF0000 );
+      //videoScene.add(crosshair);
+      //crosshair.material.color.setHex( 0xFF0000 );
       delete markers[i];
       scene.remove(r.model);
     }
     r.age++;
   }
 
-  //Add a cube 3D object for each detected marker.
+  //Add 3D objects for each detected marker.
   for (i in markers)
   {
-    if(!WearMenuOpened){
-      watchConnection.watch.sendMessage("menu");
-      // alert("test");
-      WearMenuOpened = true;
-    }
-
     var m = markers[i];
 
     if (!m.model) {
       m.model = new THREE.Object3D();
 
       selectCounter = 0;
-      if(quantity > 3) selectPosition = (quantity - 3) * 35;
-      else if(quantity == 3) selectPosition = 35;
-      else selectPosition = 0;
-
       m.model.matrixAutoUpdate = false;
 
       if(markers[0]) {
-        var geometry = new THREE.BoxGeometry(100, 30, 1);
-
+        quantity = 4;
+        //RIGHTSIDE List with selection
         for (var i = 0; i < quantity; i++) {
-          if(selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20, 20, 1), new THREE.MeshBasicMaterial({map: selectionPics[i+3], transparent: true}));
-          else var object = new THREE.Mesh(new THREE.BoxGeometry(20, 20, 1), new THREE.MeshBasicMaterial({map: selectionPics[i], transparent: true}));
+          if(selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({map: activeSelectionPics[i], transparent: true}));
+          else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({map: selectionPics[i], transparent: true}));
 
-          var objectBackground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 0x000000, transparent: true, opacity: 0.75}));
+          var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[i]);
 
-          var modeText = new THREE.Mesh(new THREE.BoxGeometry(30, 10, 1), materialMode);
+          var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
 
-          var specificText = new THREE.Mesh(new THREE.BoxGeometry(50, 20, 1), textArray[i]);
-
-          m.model.add(modeText);
-          m.model.add(specificText);
-
-          if (quantity % 2 == 0) {
-            if (i == 0) position = 0;
-            if (!((i + 1) % 2 == 0)) {
-              object.position.y = position;
-              objectBackground.position.y = position;
-              modeText.position.y = position - 2;
-              specificText.position.y = position + 2;
-            }
-            else {
-              object.position.y = (-1) * position;
-              objectBackground.position.y = (-1) * position;
-              modeText.position.y = (-1) * position - 2;
-              specificText.position.y = (-1) * position + 2;
-            }
-            if (!((i + 1) % 2 == 0)) position += 35;
-          } else {
-            if (i == 0) {
-              object.position.y = 35;
-              objectBackground.position.y = 35;
-              modeText.position.y = 33;
-              specificText.position.y = 37;
-              position = 0;
-            }
-            else {
-              if ((i + 1) % 2 == 0) {
-                object.position.y = position;
-                objectBackground.position.y = position;
-                modeText.position.y = position - 2;
-                specificText.position.y = position + 2;
-              }
-              else {
-                object.position.y = (-1) * position;
-                objectBackground.position.y = (-1) * position;
-                modeText.position.y = (-1) * position - 2;
-                specificText.position.y = (-1) * position + 2;
-              }
-              if ((i + 1) % 2 == 0) position += 35;
-            }
-          }
-          // AXIS both x and y
-          //object.lookAt(scene.position);
-          modeText.position.x = 0;
-          modeText.position.z = -22;
-          specificText.position.x = 10;
-          specificText.position.z = -24;
-          object.position.x = -35;
-          object.position.z = -20;
-          objectBackground.position.z = -18;
-          objects.push(object);
-          m.model.add(objectBackground);
-          m.model.add(object);
+          createList(m.model, i, object, specificText, modeText);
         }
-        select.position.y = selectPosition;
-        select.position.z = -15;
-        selectCounter = 0;
-        m.model.add(select);
-        videoScene.remove(crosshair);
-      }
 
-      if(markers[64]){
-        var batteryGeometry = new THREE.BoxGeometry(30, 80, 1);
+        // LEFTSIDE Batterystatus
+        var batteryGeometry = new THREE.BoxGeometry(10 * size, 30 * size, 1);
 
         switch(batteryCall) {
           case 2:
@@ -606,14 +697,64 @@ window.setInterval(function() {
             break;
 
           case 0: default:
-            var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0],
-              transparent: true}));
-                break;
+          var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0],
+            transparent: true}));
+          break;
         }
-        batteryObject.position.z = -20;
+        batteryObject.position.x = (xShift * size + 10 * size) * (-1);
+        batteryObject.position.z = -28;
         m.model.add(batteryObject);
-        crosshair.material.color.setHex( 0x00FF00 );
+
+        var canvasBattery = document.createElement('canvas');
+        canvasBattery.width = 1000;
+        canvasBattery.height = 500;
+
+        // draw the score of "cockpit" to the canvas
+        var contextBattery = canvasBattery.getContext('2d');
+        contextBattery.font = "Bold 400px Helvetica";
+        contextBattery.fillStyle = "rgba(255,255,255,0.95)";
+        contextBattery.fillText(batteryCall + '%', 0, 300);
+
+        // use canvas contents as a texture
+        var textureBattery = new THREE.Texture(canvasBattery);
+        textureBattery.needsUpdate = true;
+
+        var materialBattery = new THREE.MeshBasicMaterial( {
+          map: textureBattery,
+          transparent: true
+        } );
+
+        var batteryBackground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 0x000000, transparent: true, opacity: 0.75}));
+
+        var batteryText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), materialBattery);
+
+        batteryBackground.position.x = xShift * size * (-1);
+        batteryBackground.position.z = -20;
+        batteryText.position.y = -3 * size;
+        batteryText.position.x = (xShift * size - 30 * size) * (-1);
+        batteryText.position.z = -28;
+
+        m.model.add(batteryBackground);
+        m.model.add(batteryText);
+        //videoScene.remove(crosshair);
       }
+
+      if(markers[64]){
+        quantity = 2;
+
+        for (var i = 0; i < quantity; i++) {
+          if(selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20, 20, 1), new THREE.MeshBasicMaterial({map: activeSelectionPics[i], transparent: true}));
+          else var object = new THREE.Mesh(new THREE.BoxGeometry(20, 20, 1), new THREE.MeshBasicMaterial({map: selectionPics[i], transparent: true}));
+
+          var specificText = new THREE.Mesh(new THREE.BoxGeometry(50, 20, 1), textArray[i]);
+
+          var modeText = new THREE.Mesh(new THREE.BoxGeometry(30, 10, 1), materialMode);
+
+          createList(m.model, i, object, specificText, modeText);
+        }
+      }
+      setSelectPosition(m.model);
+
       scene.add(m.model);
     }
     copyMatrix(m.transform, tmp);
@@ -704,65 +845,3 @@ angular.module('starter', ['ionic'])
       }, 20);
     }
   }]);
-
-
-
-//=======================================
-// INIT WEAR CONNECTION
-//=======================================
-
-function watch(nodeId){
-  var self = this;
-
-  AndroidWear.onDataReceived(
-    nodeId,
-    function(message){ this.onDataReceivedHandler(message.data) }
-  );
-  self.nodeId = nodeId;
-}
-
-watch.prototype = {
-  sendMessage: function(messageString){
-    AndroidWear.sendData(this.nodeId, messageString);
-  }
-};
-
-var watchConnection = {
-
-  watch: null,
-
-  initialize: function(){
-    var self = this;
-    document.addEventListener(
-      'deviceready',
-      function(){ self.onDeviceReady(); },
-      false);
-  },
-
-  onDeviceReady: function(){
-    var self = this;
-    if(AndroidWear)
-      AndroidWear.onConnect(
-        function(message){ self.watch = new watch(message.handle); }
-      );
-  }
-
-};
-
-watchConnection.initialize();
-
-
-
-//=======================================
-// USAGE OF WEAR CONNECTION
-//=======================================
-
-// called when data arrives
-/*
-var onDataReceivedHandler = function(messageString){
-  alert("Message Received: " + messageString);
-};
-*/
-
-// to send messages: watchConnection.watch.sendMessage("myMessage");
-
