@@ -263,8 +263,9 @@ public class MenuControl
 
 
     public void closeFragment() {
+        Log.i("closeFragment", "start");
         if(fragmentFlag) {
-            Log.i("Fragment", "closed");
+            Log.i("closeFragment", "ifFragmentFlag");
             fragmentManager
                     .beginTransaction()
                     .remove(fragmentManager.findFragmentByTag("frag"))
