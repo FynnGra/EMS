@@ -1,0 +1,15 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "net.trentgardner.cordova.androidwear": {
+            "PACKAGE_NAME": "com.ionicframework.markerdetection656147"
+        }
+    },
+    "dependent_plugins": {}
+}

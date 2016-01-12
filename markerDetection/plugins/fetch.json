@@ -1,0 +1,10 @@
+{
+    "net.trentgardner.cordova.androidwear": {
+        "source": {
+            "type": "registry",
+            "id": "net.trentgardner.cordova.androidwear"
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}

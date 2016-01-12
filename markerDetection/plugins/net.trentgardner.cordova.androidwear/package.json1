@@ -1,0 +1,25 @@
+{
+    "version": "0.0.3",
+    "name": "net.trentgardner.cordova.androidwear",
+    "cordova_name": "Android Wear Connector",
+    "description": "Communication from your cordova application to an Android Wear application.",
+    "license": "Apache 2.0",
+    "repo": "https://github.com/tgardner/cordova-androidwear.git",
+    "issue": "https://github.com/tgardner/cordova-androidwear/issues",
+    "keywords": [
+        "AndroidWear",
+        "Android",
+        "Wear",
+        "Watch",
+        "Wearble"
+    ],
+    "platforms": [
+        "android"
+    ],
+    "engines": [
+        {
+            "name": "cordova",
+            "version": ">=3.0.0"
+        }
+    ]
+}

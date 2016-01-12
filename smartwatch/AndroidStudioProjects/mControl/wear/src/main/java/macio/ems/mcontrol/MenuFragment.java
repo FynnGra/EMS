@@ -94,6 +94,7 @@ public class MenuFragment
 
                 if(Math.abs(diffX) < Constants.TAP_THRESHOLD && Math.abs(diffY) < Constants.TAP_THRESHOLD){
                     Log.i("tap", "...");
+                    activity.vibrator.vibrate(Constants.VIBRATOR_LENGTH_MILLI);
                     activity.sendString("menu|tap");
                 }
                 else{
@@ -111,10 +112,13 @@ public class MenuFragment
                         if(diffY > 0){
                             Log.i("swipe", "up");
                             activity.sendString("menu|up");
+                            activity.vibrator.vibrate(Constants.VIBRATOR_LENGTH_MILLI);
+
                         }
                         else{
                             Log.i("swipe", "down");
                             activity.sendString("menu|down");
+                            activity.vibrator.vibrate(Constants.VIBRATOR_LENGTH_MILLI);
                         }
                     }
                 }

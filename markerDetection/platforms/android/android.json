@@ -1,0 +1,49 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"androidwear\"><param name=\"android-package\" value=\"net.trentgardner.cordova.androidwear.AndroidWearPlugin\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/manifest/application": [
+                        {
+                            "xml": "<service android:enabled=\"true\" android:name=\"net.trentgardner.cordova.androidwear.WearProviderService\" android:process=\":remote\"></service>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "net.trentgardner.cordova.androidwear": {
+            "PACKAGE_NAME": "com.ionicframework.markerdetection656147"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "file": "plugins/net.trentgardner.cordova.androidwear/www/androidwear.js",
+            "id": "net.trentgardner.cordova.androidwear.AndroidWear",
+            "pluginId": "net.trentgardner.cordova.androidwear",
+            "clobbers": [
+                "AndroidWear"
+            ]
+        }
+    ],
+    "plugin_metadata": {
+        "net.trentgardner.cordova.androidwear": "0.0.3"
+    }
+}

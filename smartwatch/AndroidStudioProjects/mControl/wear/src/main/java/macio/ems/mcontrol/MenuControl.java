@@ -4,6 +4,7 @@ package macio.ems.mcontrol;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +43,8 @@ public class MenuControl
     private GoogleApiClient mGoogleApiClient = null;
     private String nodeId = null;
 
+    public Vibrator vibrator = null;
+
 
 
     /**********************************************************************************************
@@ -75,6 +78,8 @@ public class MenuControl
         }
         this.retreiveDeviceNode();
         Wearable.MessageApi.addListener(mGoogleApiClient, this);
+
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         // initialize Fragments
         fragmentManager = getFragmentManager();
@@ -177,6 +182,7 @@ public class MenuControl
      *************************************** Fragment Stuff ***************************************
      **********************************************************************************************/
     public void showMenuFragment() {
+        vibrator.vibrate(Constants.VIBRATOR_LENGTH_MILLI);
         if(fragmentFlag){
             if(!(fragmentManager.findFragmentByTag("frag") instanceof MenuFragment)){
                 Log.i("Fragment", "replaced");

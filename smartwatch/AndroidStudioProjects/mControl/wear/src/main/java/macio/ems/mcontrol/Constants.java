@@ -11,5 +11,6 @@ public class Constants {
 
     public static final float TAP_THRESHOLD = 5;
     public static final float DRIVE_MAX_SPEED = 50;
+    public static final int VIBRATOR_LENGTH_MILLI = 200;
 
 }
