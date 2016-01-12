@@ -100,8 +100,8 @@ watchConnection.initialize();
 
 //Initialize video camera
 var video = document.createElement('video');
-var width = 640; //1280(unstable) - 960 - 640 - 320(bad marker detection)
-var height = 480; //720(unstable) - 540 - 480 - 240(bad marker detection)
+var width = 320; //1280(unstable) - 960 - 640 - 320(bad marker detection)
+var height = 240; //720(unstable) - 540 - 480 - 240(bad marker detection)
 
 video.width = width;
 video.height = height;
@@ -582,7 +582,7 @@ function createList(_model, _i, _object, _specificText, _specificText2){
   _specificText.position.x = xShift * size + 10 * size;
   _specificText.position.z = -28;
   _object.position.x = xShift * size - 35 * size;
-  _object.position.z = -20;
+  _object.position.z = -26;
   objectBackground.position.x = xShift * size;
   objectBackground.position.z = -18;
   //objects.push(object);
@@ -612,6 +612,9 @@ var openWatchMenu = function() {
     WearMenuOpened = true;
   }
 };
+
+var marker0 = false,
+    marker64 = false;
 
 window.setInterval(function() {
   // Draw the video frame to the canvas.
