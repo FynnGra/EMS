@@ -18,6 +18,13 @@
 
 
 //=======================================
+// CONSTANTS
+//=======================================
+
+var RENDERING_INTERVAL_MILLI = 20;
+
+
+//=======================================
 // INIT WEAR CONNECTION
 //=======================================
 
@@ -515,6 +522,7 @@ var onDataReceivedHandler = function(messageString){
           break;
         case 2:
           watchConnection.watch.sendMessage("cockpit");
+          // video.src = "192.168.0.11:9000/?action=stream";
           break;
       }
       break;
@@ -616,6 +624,12 @@ var openWatchMenu = function() {
 var marker0 = false,
     marker64 = false;
 
+// pre-initialization
+var detected,
+    m,
+    Obj3D = new THREE.Object3D();
+
+
 window.setInterval(function() {
   // Draw the video frame to the canvas.
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -629,7 +643,7 @@ window.setInterval(function() {
   // Do marker detection by using the detector object on the raster object.
   // The threshold parameter determines the threshold value
   // for turning the video frame into a 1-bit black-and-white image.
-  var detected = detector.detectMarkerLite(raster, threshold);
+  detected = detector.detectMarkerLite(raster, threshold);
 
   // Go through the detected markers and get their IDs and transformation matrices.
   for (var idx = 0; idx < detected; idx++)
@@ -674,10 +688,10 @@ window.setInterval(function() {
   //Add 3D objects for each detected marker.
   for (i in markers)
   {
-    var m = markers[i];
+    m = markers[i];
 
     if (!m.model) {
-      m.model = new THREE.Object3D();
+      m.model = Obj3D;
 
       selectCounter = 0;
       m.model.matrixAutoUpdate = false;
@@ -775,7 +789,8 @@ window.setInterval(function() {
     m.model.matrix.setFromArray(tmp);
     m.model.matrixWorldNeedsUpdate = true;
   }
-}, 20);
+}, RENDERING_INTERVAL_MILLI);
+
 
 //=======================================
 // INIT ANGULAR.JS AND IONIC
@@ -827,7 +842,7 @@ angular.module('starter', ['ionic'])
 
         rendererLeft.render(videoScene, videoCam);
         rendererLeft.render(scene, camera);
-      }, 20);
+      }, RENDERING_INTERVAL_MILLI);
     }
   }])
 
@@ -856,6 +871,6 @@ angular.module('starter', ['ionic'])
 
         rendererRight.render(videoScene, videoCam);
         rendererRight.render(scene, camera);
-      }, 20);
+      }, RENDERING_INTERVAL_MILLI);
     }
   }]);
