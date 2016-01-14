@@ -24,10 +24,14 @@
 var TIMER_INTERVAL_RENDERING = 50;
 var TIMER_INTERVAL_MARKERDETECTION_STREAM = 80;
 
+// Video size
+var VIDEO_WIDTH = 640;    //1280(unstable) - 960 - 640 - 320(bad marker detection)
+var VIDEO_HEIGHT = 480;   //720(unstable) - 540 - 480 - 240(bad marker detection)
+
 
 //=======================================
 // INIT WEAR CONNECTION
-//============================f===========
+//=======================================
 
 function watch(nodeId){
   var self = this;
@@ -84,51 +88,34 @@ watchConnection.initialize();
 
 // to send messages: watchConnection.watch.sendMessage("myMessage");
 
-/*
- * Description: Web based augmented reality application using WebGL/WebRTC, JSARToolKit, THREE.js
- *              and the Ionic framework.
- *
- *
- * Sources: http://www.html5rocks.com/en/tutorials/webgl/jsartoolkit_webrtc/
- *          http://www.html5rocks.com/en/tutorials/getusermedia/intro/
- *          https://github.com/kig/JSARToolKit
- *          http://threejs.org/docs/
- *          https://docs.angularjs.org/guide
- *
- * Version: 2.0
- *
- * Date:    06.12.2015
- *
- * Authors: Eduard Boitschenko & Fynn Grandke
- */
 
 //=======================================
-// INIT VIDEO CAMERA STREAM
+// INIT VIDEO CAMERA STREAM (WebRTC)
 //=======================================
 
-//Initialize video camera
+// Initialize video element.
 var video = document.createElement('video');
-var width = 640; //1280(unstable) - 960 - 640 - 320(bad marker detection)
-var height = 480; //720(unstable) - 540 - 480 - 240(bad marker detection)
 
-video.width = width;
-video.height = height;
-//video.loop = true;
+video.width = VIDEO_WIDTH;
+video.height = VIDEO_HEIGHT;
 video.autoplay = true;
 
-//Checking for browser vendor prefixes.
+// Checking for browser vendor prefixes.
+// In this case it's not needed, because we use Android WebView anyway and
+// therefore Chrome only.
 navigator.getUserMedia = (navigator.getUserMedia ||
-navigator.webkitGetUserMedia ||
-navigator.mozGetUserMedia);
+                          navigator.webkitGetUserMedia ||
+                          navigator.mozGetUserMedia);
 
-//This function goes through all audio/video sources of the users device.
-//It selects ONLY the last camera found as the media stream source and ignores AUDIO sources.
+// This function goes through all video sources of the users device.
+// It selects ONLY the last camera found, which is the rear camera, as the media stream source.
+// Uses MediaStream API, which is supported by Chrome.
 MediaStreamTrack.getSources(function(sourceInfos) {
   var videoSource = null;
 
   for (var i = 0; i != sourceInfos.length; ++i) {
     var sourceInfo = sourceInfos[i];
-    if (sourceInfo.kind === 'video') {
+    if (sourceInfo.kind === 'video') {  //Only video sources.
       console.log(sourceInfo.id, sourceInfo.label || 'camera');
       videoSource = sourceInfo.id;
     } else {
@@ -139,14 +126,14 @@ MediaStreamTrack.getSources(function(sourceInfos) {
   sourceSelected(videoSource);
 });
 
-//Adds the URL from the selected camera to the video streaming source.
+// Adds the URL from the selected camera to the video streaming source.
 function successCallback(stream){
   video.src = window.URL.createObjectURL(stream);
 }
 
 function errorCallback(error){
   console.log('navigator.getUserMedia error: ', error);
-  alert("Could not access UserMedia");
+  alert("Could not access UserMedia!");
 }
 
 function sourceSelected(videoSource) {
@@ -159,6 +146,37 @@ function sourceSelected(videoSource) {
   navigator.getUserMedia(constraints, successCallback, errorCallback);
 }
 
+
+//=======================================
+// INIT MARKER DETECTION (JSARToolKit)
+//=======================================
+
+
+var elementLeft,
+  elementRight,
+  containerLeft,
+  containerRight,
+  raster,
+  param,
+  resultMat,
+  detector;
+
+// The threshold parameter determines the threshold value
+// for turning the video frame into a 1-bit black-and-white image.
+var threshold = 128;
+
+// Stores the video frames on which the raster object will operate.
+var canvas = document.createElement('canvas');
+canvas.width = video.width;
+canvas.height = video.height;
+// Use this section to set the canvas size value as a power of two.
+/*canvas.width = nextPowerOf2(video.width);
+canvas.height = nextPowerOf2(video.height);
+console.log("canvasWidth: " + canvas.width + "canvasHeight: " + canvas.height);
+
+function nextPowerOf2(x){
+  return Math.pow(2, Math.ceil(Math.log(x) / Math.log(2)));
+}*/
 
 // I'm going to use a glMatrix-style matrix as an intermediary.
 // So the first step is to create a function to convert a glMatrix matrix into a Three.js Matrix4.
@@ -192,47 +210,13 @@ function copyMatrix(mat, cm) {
   cm[15] = 1;
 }
 
-var elementLeft,
-  elementRight,
-  containerLeft,
-  containerRight,
-  raster,
-  param,
-  resultMat,
-  detector;
-
-var threshold = 128;
-
-//Stores the video frames on which the raster object will operate.
-var canvas = document.createElement('canvas');
-
-/*
-canvas.width = nextPowerOf2(width);
-canvas.height = nextPowerOf2(height);
-*/
-
-canvas.width = width;
-canvas.height = height;
-
-
-console.log("canvasWidth: " + canvas.width + "canvasHeight: " + canvas.height);
-
-function nextPowerOf2(x){
-  return Math.pow(2, Math.ceil(Math.log(x) / Math.log(2)));
-}
-
-
-//=======================================
-// INIT JSARToolKit
-//=======================================
-
 // Create a RGB raster object for the 2D canvas.
 // JSARToolKit uses raster objects to read image data.
 // Note that you need to set canvas.changed = true on every frame.
 raster = new NyARRgbRaster_Canvas2D(canvas);
 
 // FLARParam is the thing used by FLARToolKit to set camera parameters.
-// Here we create a FLARParam for images with 320x240 pixel dimensions.
+// Here we create a FLARParam for images with 640x480 pixel dimensions.
 param = new FLARParam(canvas.width, canvas.height);
 
 // Create a NyARTransMatResult object for getting the marker translation matrices.
@@ -249,15 +233,17 @@ detector.setContinueMode(true);
 // glMatrix matrices are flat arrays.
 var tmp = new Float32Array(16);
 
+
 //=======================================
 // INIT THREE.JS
 //=======================================
 
-//Get an instance of the WebGLRenderer and configure it.
+
+// Get an instance of the WebGLRenderer and configure it.
 var rendererLeft = new THREE.WebGLRenderer({antialias: true});
 var rendererRight = new THREE.WebGLRenderer({antialias: true});
 
-//Create a Three.js scene and camera.
+// Create a Three.js scene and camera.
 var scene = new THREE.Scene();
 var camera = new THREE.Camera();
 scene.add(camera);
@@ -266,14 +252,13 @@ scene.add(camera);
 param.copyCameraMatrix(tmp, 10, 10000);
 camera.projectionMatrix.setFromArray(tmp);
 
-//Get context of the canvas on which the detection operates.
+// Get context of the canvas on which the detection operates.
 var ctx = canvas.getContext('2d');
 
 // To display the video, first create a texture from it.
 var videoTex = new THREE.Texture(canvas);
 videoTex.context = ctx;
 videoTex.minFilter = THREE.NearestFilter;
-
 
 // Then create a plane textured with the video.
 var plane = new THREE.Mesh(
@@ -651,8 +636,6 @@ window.setInterval(function() {
   canvas.changed = true;
 
   // Do marker detection by using the detector object on the raster object.
-  // The threshold parameter determines the threshold value
-  // for turning the video frame into a 1-bit black-and-white image.
   detected = detector.detectMarkerLite(raster, threshold);
 
   // Go through the detected markers and get their IDs and transformation matrices.
@@ -799,7 +782,7 @@ window.setInterval(function() {
     m.model.matrix.setFromArray(tmp);
     m.model.matrixWorldNeedsUpdate = true;
   }
-}, RENDERING_INTERVAL_MARKERDETECTION);
+}, TIMER_INTERVAL_MARKERDETECTION_STREAM);
 
 
 //=======================================
@@ -852,7 +835,7 @@ angular.module('starter', ['ionic'])
 
         rendererLeft.render(videoScene, videoCam);
         rendererLeft.render(scene, camera);
-      }, RENDERING_INTERVAL_MILLI_STREAM);
+      }, TIMER_INTERVAL_RENDERING);
     }
   }])
 
@@ -881,6 +864,6 @@ angular.module('starter', ['ionic'])
 
         rendererRight.render(videoScene, videoCam);
         rendererRight.render(scene, camera);
-      }, RENDERING_INTERVAL_MILLI_STREAM);
+      }, TIMER_INTERVAL_RENDERING);
     }
   }]);
