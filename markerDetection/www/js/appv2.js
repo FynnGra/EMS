@@ -21,8 +21,8 @@
 // CONSTANTS
 //=======================================
 
-var RENDERING_INTERVAL_MILLI_STREAM = 50;
-var RENDERING_INTERVAL_MARKERDETECTION = 80;
+var TIMER_INTERVAL_RENDERING = 50;
+var TIMER_INTERVAL_MARKERDETECTION_STREAM = 80;
 
 
 //=======================================
