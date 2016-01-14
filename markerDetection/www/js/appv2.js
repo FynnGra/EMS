@@ -21,12 +21,13 @@
 // CONSTANTS
 //=======================================
 
-var RENDERING_INTERVAL_MILLI = 20;
+var RENDERING_INTERVAL_MILLI_STREAM = 50;
+var RENDERING_INTERVAL_MARKERDETECTION = 80;
 
 
 //=======================================
 // INIT WEAR CONNECTION
-//=======================================
+//============================f===========
 
 function watch(nodeId){
   var self = this;
@@ -107,12 +108,12 @@ watchConnection.initialize();
 
 //Initialize video camera
 var video = document.createElement('video');
-var width = 320; //1280(unstable) - 960 - 640 - 320(bad marker detection)
-var height = 240; //720(unstable) - 540 - 480 - 240(bad marker detection)
+var width = 640; //1280(unstable) - 960 - 640 - 320(bad marker detection)
+var height = 480; //720(unstable) - 540 - 480 - 240(bad marker detection)
 
 video.width = width;
 video.height = height;
-video.loop = true;
+//video.loop = true;
 video.autoplay = true;
 
 //Checking for browser vendor prefixes.
@@ -204,13 +205,22 @@ var threshold = 128;
 
 //Stores the video frames on which the raster object will operate.
 var canvas = document.createElement('canvas');
+
+/*
 canvas.width = nextPowerOf2(width);
 canvas.height = nextPowerOf2(height);
+*/
+
+canvas.width = width;
+canvas.height = height;
+
+
 console.log("canvasWidth: " + canvas.width + "canvasHeight: " + canvas.height);
 
 function nextPowerOf2(x){
   return Math.pow(2, Math.ceil(Math.log(x) / Math.log(2)));
 }
+
 
 //=======================================
 // INIT JSARToolKit
@@ -385,7 +395,7 @@ textArray.push(materialCockpit);
 //Array for the detected markers.
 var markers = {};
 
-var size = 2;
+var size = 3;
 
 var quantity,
   position,
@@ -789,7 +799,7 @@ window.setInterval(function() {
     m.model.matrix.setFromArray(tmp);
     m.model.matrixWorldNeedsUpdate = true;
   }
-}, RENDERING_INTERVAL_MILLI);
+}, RENDERING_INTERVAL_MARKERDETECTION);
 
 
 //=======================================
@@ -842,7 +852,7 @@ angular.module('starter', ['ionic'])
 
         rendererLeft.render(videoScene, videoCam);
         rendererLeft.render(scene, camera);
-      }, RENDERING_INTERVAL_MILLI);
+      }, RENDERING_INTERVAL_MILLI_STREAM);
     }
   }])
 
@@ -871,6 +881,6 @@ angular.module('starter', ['ionic'])
 
         rendererRight.render(videoScene, videoCam);
         rendererRight.render(scene, camera);
-      }, RENDERING_INTERVAL_MILLI);
+      }, RENDERING_INTERVAL_MILLI_STREAM);
     }
   }]);

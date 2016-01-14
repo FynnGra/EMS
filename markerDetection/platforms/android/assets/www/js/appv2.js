@@ -18,8 +18,16 @@
 
 
 //=======================================
-// INIT WEAR CONNECTION
+// CONSTANTS
 //=======================================
+
+var RENDERING_INTERVAL_MILLI_STREAM = 50;
+var RENDERING_INTERVAL_MARKERDETECTION = 80;
+
+
+//=======================================
+// INIT WEAR CONNECTION
+//============================f===========
 
 function watch(nodeId){
   var self = this;
@@ -105,7 +113,7 @@ var height = 480; //720(unstable) - 540 - 480 - 240(bad marker detection)
 
 video.width = width;
 video.height = height;
-video.loop = true;
+//video.loop = true;
 video.autoplay = true;
 
 //Checking for browser vendor prefixes.
@@ -197,13 +205,22 @@ var threshold = 128;
 
 //Stores the video frames on which the raster object will operate.
 var canvas = document.createElement('canvas');
+
+/*
 canvas.width = nextPowerOf2(width);
 canvas.height = nextPowerOf2(height);
+*/
+
+canvas.width = width;
+canvas.height = height;
+
+
 console.log("canvasWidth: " + canvas.width + "canvasHeight: " + canvas.height);
 
 function nextPowerOf2(x){
   return Math.pow(2, Math.ceil(Math.log(x) / Math.log(2)));
 }
+
 
 //=======================================
 // INIT JSARToolKit
@@ -378,7 +395,7 @@ textArray.push(materialCockpit);
 //Array for the detected markers.
 var markers = {};
 
-var size = 2;
+var size = 3;
 
 var quantity,
   position,
@@ -490,7 +507,7 @@ var onDataReceivedHandler = function(messageString){
   switch(messageString) {
     case "menu|up":
       if(selectCounter > 0) {
-        select.position.y = selectPosition * size + 35 * size;
+        select.position.y = selectPosition + 35;
         selectPosition = select.position.y;
         selectCounter--;
       }
@@ -498,7 +515,7 @@ var onDataReceivedHandler = function(messageString){
 
     case "menu|down":
       if(selectCounter < (quantity - 1)) {
-        select.position.y = selectPosition * size - 35 * size;
+        select.position.y = selectPosition - 35;
         selectPosition = select.position.y;
         selectCounter++;
       }
@@ -515,6 +532,7 @@ var onDataReceivedHandler = function(messageString){
           break;
         case 2:
           watchConnection.watch.sendMessage("cockpit");
+          // video.src = "192.168.0.11:9000/?action=stream";
           break;
       }
       break;
@@ -582,7 +600,7 @@ function createList(_model, _i, _object, _specificText, _specificText2){
   _specificText.position.x = xShift * size + 10 * size;
   _specificText.position.z = -28;
   _object.position.x = xShift * size - 35 * size;
-  _object.position.z = -20;
+  _object.position.z = -26;
   objectBackground.position.x = xShift * size;
   objectBackground.position.z = -18;
   //objects.push(object);
@@ -613,6 +631,15 @@ var openWatchMenu = function() {
   }
 };
 
+var marker0 = false,
+    marker64 = false;
+
+// pre-initialization
+var detected,
+    m,
+    Obj3D = new THREE.Object3D();
+
+
 window.setInterval(function() {
   // Draw the video frame to the canvas.
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -626,7 +653,7 @@ window.setInterval(function() {
   // Do marker detection by using the detector object on the raster object.
   // The threshold parameter determines the threshold value
   // for turning the video frame into a 1-bit black-and-white image.
-  var detected = detector.detectMarkerLite(raster, threshold);
+  detected = detector.detectMarkerLite(raster, threshold);
 
   // Go through the detected markers and get their IDs and transformation matrices.
   for (var idx = 0; idx < detected; idx++)
@@ -671,10 +698,10 @@ window.setInterval(function() {
   //Add 3D objects for each detected marker.
   for (i in markers)
   {
-    var m = markers[i];
+    m = markers[i];
 
     if (!m.model) {
-      m.model = new THREE.Object3D();
+      m.model = Obj3D;
 
       selectCounter = 0;
       m.model.matrixAutoUpdate = false;
@@ -772,7 +799,8 @@ window.setInterval(function() {
     m.model.matrix.setFromArray(tmp);
     m.model.matrixWorldNeedsUpdate = true;
   }
-}, 20);
+}, RENDERING_INTERVAL_MARKERDETECTION);
+
 
 //=======================================
 // INIT ANGULAR.JS AND IONIC
@@ -824,7 +852,7 @@ angular.module('starter', ['ionic'])
 
         rendererLeft.render(videoScene, videoCam);
         rendererLeft.render(scene, camera);
-      }, 20);
+      }, RENDERING_INTERVAL_MILLI_STREAM);
     }
   }])
 
@@ -853,6 +881,6 @@ angular.module('starter', ['ionic'])
 
         rendererRight.render(videoScene, videoCam);
         rendererRight.render(scene, camera);
-      }, 20);
+      }, RENDERING_INTERVAL_MILLI_STREAM);
     }
   }]);
