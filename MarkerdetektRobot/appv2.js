@@ -9,11 +9,11 @@
  *          http://threejs.org/docs/
  *          https://docs.angularjs.org/guide
  *
- * Version: 2.0
+ * Version: 2.1
  *
- * Date:    06.12.2015
+ * Date:    14.1.2016
  *
- * Authors: Eduard Boitschenko & Fynn Grandke
+ * Authors: Eduard Boitschenko & Fynn Grandke & Lasse Hänert
  */
 
 //=======================================
@@ -27,7 +27,7 @@ var height = 240;  //720(unstable) - 540 - 480 - 240(bad marker detection)
 
 video.width = width;
 video.height = height;
-video.src = "http://192.168.123.1/vrtest/cam_pic_new.php?";
+video.src = "http://192.168.0.11/?action=stream";
 
 
 // I'm going to use a glMatrix-style matrix as an intermediary.
