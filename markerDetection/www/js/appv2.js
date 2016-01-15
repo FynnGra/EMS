@@ -16,9 +16,8 @@
  * Authors: Eduard Boitschenko & Fynn Grandke
  */
 
+// TEST
 
-//=======================================
-// CONSTANTS
 //=======================================
 
 var TIMER_INTERVAL_RENDERING = 50;
