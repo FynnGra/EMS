@@ -19,6 +19,9 @@
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
 
+    <!-- global control -->
+    <script src="js/control.js"></script>
+
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -30,17 +33,23 @@
 
     <ion-pane ng-controller="MotionController">
         <ion-content>
-            <h2>Beschleunigung: {{measurements.z}}</h2>
-            <h2>Richtung: {{measurements.y}}</h2>
-            <h2>Speed: {{calculations.speed}}</h2>
-            <h2>Angle: {{calculations.angle}}</h2>
-            <h2>Battery: {{info.battery}}</h2>
+            <h3>Speed Data: {{measurements.z}}</h3>
+            <h3>Direction Data: {{measurements.y}}</h3>
+            <h3>Speed Calc.: {{calculations.speed}}</h3>
+            <h3>Direction Calc.: {{calculations.direction}}</h3>
+            <h3>Battery: {{info.battery}}</h3>
 
             <button class="button button-full button-positive" ng-click="startWatching()">
                 Start
             </button>
             <button class="button button-full button-positive" ng-click="stopWatching()">
                 Stop
+            </button>
+            <button class="button button-full button-positive" ng-click="startAutoDrive()">
+                Auto Drive
+            </button>
+            <button class="button button-full button-positive" ng-click="stopAutoDrive()">
+                Stop Auto Drive
             </button>
         </ion-content>
     </ion-pane>

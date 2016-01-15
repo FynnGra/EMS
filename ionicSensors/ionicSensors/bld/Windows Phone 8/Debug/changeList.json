@@ -269,8 +269,7 @@
     "plugins\\cordova-plugin-device\\src\\windows\\DeviceProxy.js",
     "res\\icons\\windows\\Square44x44Logo.scale-240.png",
     "res\\screens\\android\\screen-mdpi-portrait.png",
-    "www\\lib\\ionic\\scss\\_radio.scss",
-    "www\\js\\control.js"
+    "www\\lib\\ionic\\scss\\_radio.scss"
   ],
   "deletedFilesIos": [],
   "addedPluginsIos": [
@@ -280,9 +279,7 @@
     "cordova-plugin-device@1.1.0"
   ],
   "deletedPluginsIos": [],
-  "changedFiles": [
-    "www\\js\\app.js"
-  ],
+  "changedFiles": [],
   "deletedFiles": [],
   "addedPlugins": [],
   "deletedPlugins": []
