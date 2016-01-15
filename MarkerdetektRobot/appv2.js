@@ -27,7 +27,7 @@ var height = 240;  //720(unstable) - 540 - 480 - 240(bad marker detection)
 
 video.width = width;
 video.height = height;
-video.src = "http://192.168.0.11/?action=stream";
+video.src = "http://192.168.0.11:9000/?action=snapshot";
 
 
 // I'm going to use a glMatrix-style matrix as an intermediary.
