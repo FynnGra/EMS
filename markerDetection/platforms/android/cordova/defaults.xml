@@ -23,4 +23,5 @@
 
     <!-- Preferences for Android -->
     <preference name="loglevel" value="DEBUG" />
+
 </widget>

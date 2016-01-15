@@ -9,6 +9,9 @@
     "installed_plugins": {
         "net.trentgardner.cordova.androidwear": {
             "PACKAGE_NAME": "com.ionicframework.markerdetection656147"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
         }
     },
     "dependent_plugins": {}

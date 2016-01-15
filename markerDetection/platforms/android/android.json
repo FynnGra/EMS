@@ -11,6 +11,10 @@
                         {
                             "xml": "<feature name=\"androidwear\"><param name=\"android-package\" value=\"net.trentgardner.cordova.androidwear.AndroidWearPlugin\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -30,6 +34,9 @@
     "installed_plugins": {
         "net.trentgardner.cordova.androidwear": {
             "PACKAGE_NAME": "com.ionicframework.markerdetection656147"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
         }
     },
     "dependent_plugins": {},
@@ -41,9 +48,18 @@
             "clobbers": [
                 "AndroidWear"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+            "id": "cordova-plugin-splashscreen.SplashScreen",
+            "pluginId": "cordova-plugin-splashscreen",
+            "clobbers": [
+                "navigator.splashscreen"
+            ]
         }
     ],
     "plugin_metadata": {
-        "net.trentgardner.cordova.androidwear": "0.0.3"
+        "net.trentgardner.cordova.androidwear": "0.0.3",
+        "cordova-plugin-splashscreen": "3.0.0"
     }
 }

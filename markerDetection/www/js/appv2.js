@@ -828,6 +828,12 @@ angular.module('starter', ['ionic'])
       if(window.StatusBar) {
         StatusBar.styleDefault();
       }
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      }
+      if (navigator.splashscreen) {
+        navigator.splashscreen.hide();
+      }
     });
   })
 
