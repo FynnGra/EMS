@@ -368,7 +368,7 @@ textArray.push(materialCockpit);
 //Array for the detected markers.
 var markers = {};
 
-var size = 3;
+var size = 2;
 
 var quantity,
   position,
@@ -620,11 +620,6 @@ var openWatchMenu = function() {
 var marker0 = false,
     marker64 = false;
 
-// pre-initialization
-var detected,
-    m,
-    Obj3D = new THREE.Object3D();
-
 
 window.setInterval(function() {
   // Draw the video frame to the canvas.
@@ -637,7 +632,7 @@ window.setInterval(function() {
   canvas.changed = true;
 
   // Do marker detection by using the detector object on the raster object.
-  detected = detector.detectMarkerLite(raster, threshold);
+  var detected = detector.detectMarkerLite(raster, threshold);
 
   // Go through the detected markers and get their IDs and transformation matrices.
   for (var idx = 0; idx < detected; idx++)
@@ -671,8 +666,6 @@ window.setInterval(function() {
   {
     var r = markers[i];
     if (r.age > 1) {
-      //videoScene.add(crosshair);
-      //crosshair.material.color.setHex( 0xFF0000 );
       delete markers[i];
       if(i == 0) marker0 = false;
       if(i == 64) marker64 = false;
@@ -684,10 +677,10 @@ window.setInterval(function() {
   //Add 3D objects for each detected marker.
   for (i in markers)
   {
-    m = markers[i];
+    var m = markers[i];
 
     if (!m.model) {
-      m.model = Obj3D;
+      m.model = new THREE.Object3D();
 
       m.model.matrixAutoUpdate = false;
 
