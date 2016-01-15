@@ -8,17 +8,6 @@
         android:id="@+id/auto"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/auto" />
+        android:src="@drawable/bg_auto" />
 
-    <Button
-        android:layout_width="20dp"
-        android:layout_height="320dp"
-        android:id="@+id/backauto"
-        android:background="#DDDDDD"
-        android:text="back"
-        android:translationZ="5dp"
-        android:elevation="5dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:clickable="true" />
 </RelativeLayout>

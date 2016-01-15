@@ -16,18 +16,21 @@
  * Authors: Eduard Boitschenko & Fynn Grandke
  */
 
+// TEST
 
 //=======================================
-// CONSTANTS
-//=======================================
 
-var RENDERING_INTERVAL_MILLI_STREAM = 50;
-var RENDERING_INTERVAL_MARKERDETECTION = 80;
+var TIMER_INTERVAL_RENDERING = 60;
+var TIMER_INTERVAL_MARKERDETECTION_STREAM = 60;
+
+// Video size
+var VIDEO_WIDTH = 640;    //1280(unstable) - 960 - 640 - 320(bad marker detection)
+var VIDEO_HEIGHT = 480;   //720(unstable) - 540 - 480 - 240(bad marker detection)
 
 
 //=======================================
 // INIT WEAR CONNECTION
-//============================f===========
+//=======================================
 
 function watch(nodeId){
   var self = this;
@@ -84,51 +87,34 @@ watchConnection.initialize();
 
 // to send messages: watchConnection.watch.sendMessage("myMessage");
 
-/*
- * Description: Web based augmented reality application using WebGL/WebRTC, JSARToolKit, THREE.js
- *              and the Ionic framework.
- *
- *
- * Sources: http://www.html5rocks.com/en/tutorials/webgl/jsartoolkit_webrtc/
- *          http://www.html5rocks.com/en/tutorials/getusermedia/intro/
- *          https://github.com/kig/JSARToolKit
- *          http://threejs.org/docs/
- *          https://docs.angularjs.org/guide
- *
- * Version: 2.0
- *
- * Date:    06.12.2015
- *
- * Authors: Eduard Boitschenko & Fynn Grandke
- */
 
 //=======================================
-// INIT VIDEO CAMERA STREAM
+// INIT VIDEO CAMERA STREAM (WebRTC)
 //=======================================
 
-//Initialize video camera
+// Initialize video element.
 var video = document.createElement('video');
-var width = 640; //1280(unstable) - 960 - 640 - 320(bad marker detection)
-var height = 480; //720(unstable) - 540 - 480 - 240(bad marker detection)
 
-video.width = width;
-video.height = height;
-//video.loop = true;
+video.width = VIDEO_WIDTH;
+video.height = VIDEO_HEIGHT;
 video.autoplay = true;
 
-//Checking for browser vendor prefixes.
+// Checking for browser vendor prefixes.
+// In this case it's not needed, because we use Android WebView anyway and
+// therefore Chrome only.
 navigator.getUserMedia = (navigator.getUserMedia ||
-navigator.webkitGetUserMedia ||
-navigator.mozGetUserMedia);
+                          navigator.webkitGetUserMedia ||
+                          navigator.mozGetUserMedia);
 
-//This function goes through all audio/video sources of the users device.
-//It selects ONLY the last camera found as the media stream source and ignores AUDIO sources.
+// This function goes through all video sources of the users device.
+// It selects ONLY the last camera found, which is the rear camera, as the media stream source.
+// Uses MediaStream API, which is supported by Chrome.
 MediaStreamTrack.getSources(function(sourceInfos) {
   var videoSource = null;
 
   for (var i = 0; i != sourceInfos.length; ++i) {
     var sourceInfo = sourceInfos[i];
-    if (sourceInfo.kind === 'video') {
+    if (sourceInfo.kind === 'video') {  //Only video sources.
       console.log(sourceInfo.id, sourceInfo.label || 'camera');
       videoSource = sourceInfo.id;
     } else {
@@ -139,14 +125,14 @@ MediaStreamTrack.getSources(function(sourceInfos) {
   sourceSelected(videoSource);
 });
 
-//Adds the URL from the selected camera to the video streaming source.
+// Adds the URL from the selected camera to the video streaming source.
 function successCallback(stream){
   video.src = window.URL.createObjectURL(stream);
 }
 
 function errorCallback(error){
   console.log('navigator.getUserMedia error: ', error);
-  alert("Could not access UserMedia");
+  alert("Could not access UserMedia!");
 }
 
 function sourceSelected(videoSource) {
@@ -159,6 +145,37 @@ function sourceSelected(videoSource) {
   navigator.getUserMedia(constraints, successCallback, errorCallback);
 }
 
+
+//=======================================
+// INIT MARKER DETECTION (JSARToolKit)
+//=======================================
+
+
+var elementLeft,
+  elementRight,
+  containerLeft,
+  containerRight,
+  raster,
+  param,
+  resultMat,
+  detector;
+
+// The threshold parameter determines the threshold value
+// for turning the video frame into a 1-bit black-and-white image.
+var threshold = 128;
+
+// Stores the video frames on which the raster object will operate.
+var canvas = document.createElement('canvas');
+canvas.width = video.width;
+canvas.height = video.height;
+// Use this section to set the canvas size value as a power of two.
+/*canvas.width = nextPowerOf2(video.width);
+canvas.height = nextPowerOf2(video.height);
+console.log("canvasWidth: " + canvas.width + "canvasHeight: " + canvas.height);
+
+function nextPowerOf2(x){
+  return Math.pow(2, Math.ceil(Math.log(x) / Math.log(2)));
+}*/
 
 // I'm going to use a glMatrix-style matrix as an intermediary.
 // So the first step is to create a function to convert a glMatrix matrix into a Three.js Matrix4.
@@ -192,47 +209,13 @@ function copyMatrix(mat, cm) {
   cm[15] = 1;
 }
 
-var elementLeft,
-  elementRight,
-  containerLeft,
-  containerRight,
-  raster,
-  param,
-  resultMat,
-  detector;
-
-var threshold = 128;
-
-//Stores the video frames on which the raster object will operate.
-var canvas = document.createElement('canvas');
-
-/*
-canvas.width = nextPowerOf2(width);
-canvas.height = nextPowerOf2(height);
-*/
-
-canvas.width = width;
-canvas.height = height;
-
-
-console.log("canvasWidth: " + canvas.width + "canvasHeight: " + canvas.height);
-
-function nextPowerOf2(x){
-  return Math.pow(2, Math.ceil(Math.log(x) / Math.log(2)));
-}
-
-
-//=======================================
-// INIT JSARToolKit
-//=======================================
-
 // Create a RGB raster object for the 2D canvas.
 // JSARToolKit uses raster objects to read image data.
 // Note that you need to set canvas.changed = true on every frame.
 raster = new NyARRgbRaster_Canvas2D(canvas);
 
 // FLARParam is the thing used by FLARToolKit to set camera parameters.
-// Here we create a FLARParam for images with 320x240 pixel dimensions.
+// Here we create a FLARParam for images with 640x480 pixel dimensions.
 param = new FLARParam(canvas.width, canvas.height);
 
 // Create a NyARTransMatResult object for getting the marker translation matrices.
@@ -249,15 +232,17 @@ detector.setContinueMode(true);
 // glMatrix matrices are flat arrays.
 var tmp = new Float32Array(16);
 
+
 //=======================================
 // INIT THREE.JS
 //=======================================
 
-//Get an instance of the WebGLRenderer and configure it.
+
+// Get an instance of the WebGLRenderer and configure it.
 var rendererLeft = new THREE.WebGLRenderer({antialias: true});
 var rendererRight = new THREE.WebGLRenderer({antialias: true});
 
-//Create a Three.js scene and camera.
+// Create a Three.js scene and camera.
 var scene = new THREE.Scene();
 var camera = new THREE.Camera();
 scene.add(camera);
@@ -266,14 +251,14 @@ scene.add(camera);
 param.copyCameraMatrix(tmp, 10, 10000);
 camera.projectionMatrix.setFromArray(tmp);
 
-//Get context of the canvas on which the detection operates.
+// Get context of the canvas on which the detection operates.
 var ctx = canvas.getContext('2d');
 
 // To display the video, first create a texture from it.
 var videoTex = new THREE.Texture(canvas);
 videoTex.context = ctx;
-videoTex.minFilter = THREE.NearestFilter;
-
+videoTex.magFilter = THREE.LinearFilter;
+videoTex.minFilter = THREE.LinearFilter;
 
 // Then create a plane textured with the video.
 var plane = new THREE.Mesh(
@@ -294,17 +279,6 @@ var videoCam = new THREE.Camera();
 
 videoScene.add(plane);
 videoScene.add(videoCam);
-
-/*
- crosshair = new THREE.Mesh(
- new THREE.BoxGeometry( 0.02, 0.02, 1 ),
- new THREE.MeshBasicMaterial( {
- color: 0x000000,
- transparent: true,
- opacity: 0.5
- })
- );
- */
 
 // TESTAREA START
 var textArray = [];
@@ -395,13 +369,13 @@ textArray.push(materialCockpit);
 //Array for the detected markers.
 var markers = {};
 
-var size = 3;
+var size = 4;
 
 var quantity,
   position,
   selectPosition,
   selectCounter,
-  selectedMode = 0;
+  selectedMode = -1;
 
 var xShift = 120;
 
@@ -453,6 +427,19 @@ activeSelectionPics.push(activeSelectionTexture0);
 activeSelectionPics.push(activeSelectionTexture1);
 activeSelectionPics.push(activeSelectionTexture2);
 
+var beaconPics = [];
+var activeBeaconPics = [];
+var beaconTexture0 = THREE.ImageUtils.loadTexture("img/icon_beacon-attract_inaktiv.svg"),
+  beaconTexture1 = THREE.ImageUtils.loadTexture("img/icon_beacon-reject_inaktiv.svg");
+
+var activeBeaconTexture0 = THREE.ImageUtils.loadTexture("img/icon_beacon-attract_aktiv.svg"),
+  activeBeaconTexture1 = THREE.ImageUtils.loadTexture("img/icon_beacon-reject_aktiv.svg");
+
+beaconPics.push(beaconTexture0);
+beaconPics.push(beaconTexture1);
+
+activeBeaconPics.push(activeBeaconTexture0);
+activeBeaconPics.push(activeBeaconTexture1);
 
 var select = new THREE.Mesh(
   new THREE.BoxGeometry( 15 * size, 30 * size, 1 ),
@@ -600,7 +587,7 @@ function createList(_model, _i, _object, _specificText, _specificText2){
   _specificText.position.x = xShift * size + 10 * size;
   _specificText.position.z = -28;
   _object.position.x = xShift * size - 35 * size;
-  _object.position.z = -26;
+  _object.position.z = -32;
   objectBackground.position.x = xShift * size;
   objectBackground.position.z = -18;
   //objects.push(object);
@@ -634,11 +621,6 @@ var openWatchMenu = function() {
 var marker0 = false,
     marker64 = false;
 
-// pre-initialization
-var detected,
-    m,
-    Obj3D = new THREE.Object3D();
-
 
 window.setInterval(function() {
   // Draw the video frame to the canvas.
@@ -651,9 +633,7 @@ window.setInterval(function() {
   canvas.changed = true;
 
   // Do marker detection by using the detector object on the raster object.
-  // The threshold parameter determines the threshold value
-  // for turning the video frame into a 1-bit black-and-white image.
-  detected = detector.detectMarkerLite(raster, threshold);
+  var detected = detector.detectMarkerLite(raster, threshold);
 
   // Go through the detected markers and get their IDs and transformation matrices.
   for (var idx = 0; idx < detected; idx++)
@@ -687,9 +667,9 @@ window.setInterval(function() {
   {
     var r = markers[i];
     if (r.age > 1) {
-      //videoScene.add(crosshair);
-      //crosshair.material.color.setHex( 0xFF0000 );
       delete markers[i];
+      if(i == 0) marker0 = false;
+      if(i == 64) marker64 = false;
       scene.remove(r.model);
     }
     r.age++;
@@ -698,97 +678,121 @@ window.setInterval(function() {
   //Add 3D objects for each detected marker.
   for (i in markers)
   {
-    m = markers[i];
+    var m = markers[i];
 
     if (!m.model) {
-      m.model = Obj3D;
+      m.model = new THREE.Object3D();
 
-      selectCounter = 0;
       m.model.matrixAutoUpdate = false;
 
       if(markers[0]) {
-        openWatchMenu();
-        quantity = 3;
-        //RIGHTSIDE List with selection
-        for (var i = 0; i < quantity; i++) {
-          if(selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({map: activeSelectionPics[i], transparent: true}));
-          else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({map: selectionPics[i], transparent: true}));
+        if (marker0 == false) {
+          marker0 = true;
+          openWatchMenu();
+          quantity = 3;
+          //RIGHTSIDE List with selection
+          for (var i = 0; i < quantity; i++) {
+            if (selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+              map: activeSelectionPics[i],
+              transparent: true
+            }));
+            else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+              map: selectionPics[i],
+              transparent: true
+            }));
 
-          var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[i]);
+            var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[i]);
 
-          var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
+            var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
 
-          createList(m.model, i, object, specificText, modeText);
+            createList(m.model, i, object, specificText, modeText);
+          }
+
+          // LEFTSIDE Batterystatus
+          var batteryGeometry = new THREE.BoxGeometry(10 * size, 30 * size, 1);
+
+          switch (batteryCall) {
+            case 2:
+              var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[2]}));
+              break;
+
+            case 1:
+              var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[1]}));
+              break;
+
+            case 0:
+            default:
+              var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({
+                map: batteryState[0],
+                transparent: true
+              }));
+              break;
+          }
+          batteryObject.position.x = (xShift * size + 10 * size) * (-1);
+          batteryObject.position.z = -28;
+          m.model.add(batteryObject);
+
+          var canvasBattery = document.createElement('canvas');
+          canvasBattery.width = 1000;
+          canvasBattery.height = 500;
+
+          // draw the score of "cockpit" to the canvas
+          var contextBattery = canvasBattery.getContext('2d');
+          contextBattery.font = "Bold 400px Helvetica";
+          contextBattery.fillStyle = "rgba(255,255,255,0.95)";
+          contextBattery.fillText(batteryCall + '%', 0, 300);
+
+          // use canvas contents as a texture
+          var textureBattery = new THREE.Texture(canvasBattery);
+          textureBattery.needsUpdate = true;
+
+          var materialBattery = new THREE.MeshBasicMaterial({
+            map: textureBattery,
+            transparent: true
+          });
+
+          var batteryBackground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+            color: 0x000000,
+            transparent: true,
+            opacity: 0.75
+          }));
+
+          var batteryText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), materialBattery);
+
+          batteryBackground.position.x = xShift * size * (-1);
+          batteryBackground.position.z = -20;
+          batteryText.position.y = -3 * size;
+          batteryText.position.x = (xShift * size - 30 * size) * (-1);
+          batteryText.position.z = -28;
+
+          m.model.add(batteryBackground);
+          m.model.add(batteryText);
+          //videoScene.remove(crosshair);
         }
-
-        // LEFTSIDE Batterystatus
-        var batteryGeometry = new THREE.BoxGeometry(10 * size, 30 * size, 1);
-
-        switch(batteryCall) {
-          case 2:
-            var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[2]}));
-            break;
-
-          case 1:
-            var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[1]}));
-            break;
-
-          case 0: default:
-          var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0],
-            transparent: true}));
-          break;
-        }
-        batteryObject.position.x = (xShift * size + 10 * size) * (-1);
-        batteryObject.position.z = -28;
-        m.model.add(batteryObject);
-
-        var canvasBattery = document.createElement('canvas');
-        canvasBattery.width = 1000;
-        canvasBattery.height = 500;
-
-        // draw the score of "cockpit" to the canvas
-        var contextBattery = canvasBattery.getContext('2d');
-        contextBattery.font = "Bold 400px Helvetica";
-        contextBattery.fillStyle = "rgba(255,255,255,0.95)";
-        contextBattery.fillText(batteryCall + '%', 0, 300);
-
-        // use canvas contents as a texture
-        var textureBattery = new THREE.Texture(canvasBattery);
-        textureBattery.needsUpdate = true;
-
-        var materialBattery = new THREE.MeshBasicMaterial( {
-          map: textureBattery,
-          transparent: true
-        } );
-
-        var batteryBackground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 0x000000, transparent: true, opacity: 0.75}));
-
-        var batteryText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), materialBattery);
-
-        batteryBackground.position.x = xShift * size * (-1);
-        batteryBackground.position.z = -20;
-        batteryText.position.y = -3 * size;
-        batteryText.position.x = (xShift * size - 30 * size) * (-1);
-        batteryText.position.z = -28;
-
-        m.model.add(batteryBackground);
-        m.model.add(batteryText);
-        //videoScene.remove(crosshair);
       }
 
-      if(markers[64]){
-        openWatchMenu();
-        quantity = 2;
+      if(markers[64]) {
+        if (marker64 == false) {
+          marker64 = true;
+          openWatchMenu();
+          quantity = 2;
 
-        for (var i = 0; i < quantity; i++) {
-          if(selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20, 20, 1), new THREE.MeshBasicMaterial({map: activeSelectionPics[i], transparent: true}));
-          else var object = new THREE.Mesh(new THREE.BoxGeometry(20, 20, 1), new THREE.MeshBasicMaterial({map: selectionPics[i], transparent: true}));
+          for (var i = 0; i < quantity; i++) {
+            if (selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+              map: activeBeaconPics[i],
+              transparent: true
+            }));
+            else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+              map: beaconPics[i],
+              transparent: true
+            }));
 
-          var specificText = new THREE.Mesh(new THREE.BoxGeometry(50, 20, 1), textArray[i]);
+            var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[i]);
 
-          var modeText = new THREE.Mesh(new THREE.BoxGeometry(30, 10, 1), materialMode);
+            var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
 
-          createList(m.model, i, object, specificText, modeText);
+            createList(m.model, i, object, specificText, modeText);
+          }
         }
       }
       setSelectPosition(m.model);
@@ -799,7 +803,7 @@ window.setInterval(function() {
     m.model.matrix.setFromArray(tmp);
     m.model.matrixWorldNeedsUpdate = true;
   }
-}, RENDERING_INTERVAL_MARKERDETECTION);
+}, TIMER_INTERVAL_MARKERDETECTION_STREAM);
 
 
 //=======================================
@@ -823,6 +827,12 @@ angular.module('starter', ['ionic'])
       ionic.Platform.fullScreen();
       if(window.StatusBar) {
         StatusBar.styleDefault();
+      }
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      }
+      if (navigator.splashscreen) {
+        navigator.splashscreen.hide();
       }
     });
   })
@@ -852,7 +862,7 @@ angular.module('starter', ['ionic'])
 
         rendererLeft.render(videoScene, videoCam);
         rendererLeft.render(scene, camera);
-      }, RENDERING_INTERVAL_MILLI_STREAM);
+      }, TIMER_INTERVAL_RENDERING);
     }
   }])
 
@@ -881,6 +891,6 @@ angular.module('starter', ['ionic'])
 
         rendererRight.render(videoScene, videoCam);
         rendererRight.render(scene, camera);
-      }, RENDERING_INTERVAL_MILLI_STREAM);
+      }, TIMER_INTERVAL_RENDERING);
     }
   }]);

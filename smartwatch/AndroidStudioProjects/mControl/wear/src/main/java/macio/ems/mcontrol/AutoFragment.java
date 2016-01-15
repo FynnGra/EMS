@@ -39,15 +39,6 @@ public class AutoFragment
         // inflate View
         view = localInflater.inflate(R.layout.auto_fragment, viewGroup, false);
 
-        view.findViewById(R.id.backauto).setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View v) {
-                        activity.closeFragment();
-                        activity.sendString("close");
-                    }
-                }
-        );
-
         return view;
     }
 

@@ -14,19 +14,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/menu"
         android:layout_centerVertical="true"
-        android:src="@drawable/menu"
+        android:src="@drawable/bg_menu"
         android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="20dp"
-        android:layout_height="320dp"
-        android:id="@+id/backmenu"
-        android:background="#DDDDDD"
-        android:text="back"
-        android:translationZ="5dp"
-        android:elevation="5dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:clickable="true" />
 
 </RelativeLayout>

@@ -142,11 +142,12 @@ public class MenuControl
      **********************************************************************************************/
     @Override
     public void onMessageReceived(MessageEvent messageEvent ) {
-        // Toast.makeText(this, "EMPFANGEN: " + new String(messageEvent.getData()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "EMPFANGEN: " + new String(messageEvent.getData()), Toast.LENGTH_SHORT).show();
         // String nodeId =  messageEvent.getSourceNodeId();
         //                  messageEvent.getPath();
 
         String message = new String(messageEvent.getData());
+        Log.i("Message received: ", message);
         switch(message){
             case "menu":
                 showMenuFragment();

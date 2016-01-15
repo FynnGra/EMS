@@ -13,7 +13,7 @@ style="@style/noSwipeToDismiss">
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:id="@+id/joystickBG"
-        android:src="@drawable/joystick" />
+        android:src="@drawable/bg_joystick" />
 
     <macio.ems.mcontrol.JoystickView
         android:layout_width="wrap_content"
@@ -21,18 +21,8 @@ style="@style/noSwipeToDismiss">
         android:id="@+id/joystick"
         android:layout_gravity="center_horizontal"
         android:translationZ="2dp"
-        android:elevation="2dp" />
-
-    <Button
-        android:layout_width="20dp"
-        android:layout_height="320dp"
-        android:id="@+id/backjoystick"
+        android:elevation="2dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:background="#DDDDDD"
-        android:text="back"
-        android:translationZ="5dp"
-        android:elevation="5dp"
-        android:clickable="true" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

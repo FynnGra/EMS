@@ -8,6 +8,9 @@ package macio.ems.mcontrol;
  *******************************************************/
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -28,6 +31,7 @@ public class JoystickView extends View implements Runnable {
     public final static int LEFT = 1;
     public final static int LEFT_FRONT = 2;
     // Variables
+    private Bitmap nipple = BitmapFactory.decodeResource(getResources(), R.drawable.nipple); // todo: nach außen als Property exponieren
     private OnJoystickMoveListener onJoystickMoveListener; // Listener
     private Thread thread = new Thread(this);
     private long loopInterval = DEFAULT_LOOP_INTERVAL;
@@ -60,25 +64,35 @@ public class JoystickView extends View implements Runnable {
     }
 
     protected void initJoystickView() {
+        /*
         mainCircle = new Paint(Paint.ANTI_ALIAS_FLAG);
         mainCircle.setColor(Color.WHITE);
         mainCircle.setStyle(Paint.Style.FILL_AND_STROKE);
+        */
 
+        /*
         secondaryCircle = new Paint(Paint.ANTI_ALIAS_FLAG);
         secondaryCircle.setColor(Color.rgb(20, 50, 63));
         secondaryCircle.setStyle(Paint.Style.STROKE);
+        */
 
+        /*
         verticalLine = new Paint();
-        verticalLine.setStrokeWidth(5);
+        verticalLine.setStrokeWidth(2);
         verticalLine.setColor(Color.rgb(20, 50, 63));
+        */
 
+        /*
         horizontalLine = new Paint();
         horizontalLine.setStrokeWidth(2);
         horizontalLine.setColor(Color.rgb(20, 50, 63));
+        */
 
+        /*
         button = new Paint(Paint.ANTI_ALIAS_FLAG);
         button.setColor(Color.rgb(0, 70, 83));
         button.setStyle(Paint.Style.FILL);
+        */
     }
 
     @Override
@@ -131,7 +145,7 @@ public class JoystickView extends View implements Runnable {
         // super.onDraw(canvas);
         centerX = (getWidth()) / 2;
         centerY = (getHeight()) / 2;
-
+/*
         // painting the main circle
         canvas.drawCircle((int) centerX, (int) centerY, joystickRadius,
                 mainCircle);
@@ -146,9 +160,10 @@ public class JoystickView extends View implements Runnable {
                 horizontalLine);
         canvas.drawLine((float) centerX, (float) (centerY + joystickRadius),
                 (float) centerX, (float) centerY, horizontalLine);
-
+*/
         // painting the move button
-        canvas.drawCircle(xPosition, yPosition, buttonRadius, button);
+        // canvas.drawCircle(xPosition, yPosition, buttonRadius, button);
+        canvas.drawBitmap(nipple, (xPosition-75), (yPosition-75), null);
     }
 
     @Override

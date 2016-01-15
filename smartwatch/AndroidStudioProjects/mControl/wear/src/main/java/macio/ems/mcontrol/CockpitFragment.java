@@ -39,15 +39,6 @@ public class CockpitFragment
         // inflate View
         view = localInflater.inflate(R.layout.cockpit_fragment, viewGroup, false);
 
-        view.findViewById(R.id.backcockpit).setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View v) {
-                        activity.closeFragment();
-                        activity.sendString("close");
-                    }
-                }
-        );
-
         return view;
     }
 

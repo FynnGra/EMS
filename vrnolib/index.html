@@ -1,0 +1,51 @@
+<!DOCTYPE html> <html lang="en">
+  <head>
+    <title>Test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <style>
+          body { /* body has margin and padding as default */
+              margin: 0;
+              padding: 0;
+              overflow: hidden; /* no scroll bars */
+          }
+          #left {
+          }
+          #right {
+          }
+      </style>
+  <body>
+      <img src="http://192.168.0.11:9000/?action=stream" id="left">
+      <img src="http://192.168.0.11:9000/?action=stream" id="right">
+  </body>
+  <script>
+      var height = 0;
+      var width = 0;
+      if( typeof( window.innerWidth ) == 'number' )
+      {
+          //Non-IE
+          width = window.innerWidth;
+          height = window.innerHeight;
+      }
+      else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) )
+      {
+          //IE 6+ in 'standards compliant mode'
+          width = document.documentElement.clientWidth;
+          height = document.documentElement.clientHeight;
+      }
+      else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) )
+      {
+          //IE 4 compatible
+          width = document.body.clientWidth;
+          height = document.body.clientHeight;
+      }
+      var left = document.getElementById("left");
+      var right = document.getElementById("right");
+      left.setAttribute("width", width/2);
+      right.setAttribute("width", width/2);
+      left.setAttribute("height", height);
+      right.setAttribute("height", height);
+      left.style.float = "left";
+      right.style.float = "right";
+  </script>
+</html>
+
