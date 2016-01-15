@@ -279,17 +279,6 @@ var videoCam = new THREE.Camera();
 videoScene.add(plane);
 videoScene.add(videoCam);
 
-/*
- crosshair = new THREE.Mesh(
- new THREE.BoxGeometry( 0.02, 0.02, 1 ),
- new THREE.MeshBasicMaterial( {
- color: 0x000000,
- transparent: true,
- opacity: 0.5
- })
- );
- */
-
 // TESTAREA START
 var textArray = [];
 // create canvas
@@ -385,7 +374,7 @@ var quantity,
   position,
   selectPosition,
   selectCounter,
-  selectedMode = 0;
+  selectedMode = -1;
 
 var xShift = 120;
 
@@ -437,6 +426,19 @@ activeSelectionPics.push(activeSelectionTexture0);
 activeSelectionPics.push(activeSelectionTexture1);
 activeSelectionPics.push(activeSelectionTexture2);
 
+var beaconPics = [];
+var activeBeaconPics = [];
+var beaconTexture0 = THREE.ImageUtils.loadTexture("img/icon_beacon-attract_inaktiv.svg"),
+  beaconTexture1 = THREE.ImageUtils.loadTexture("img/icon_beacon-reject_inaktiv.svg");
+
+var activeBeaconTexture0 = THREE.ImageUtils.loadTexture("img/icon_beacon-attract_aktiv.svg"),
+  activeBeaconTexture1 = THREE.ImageUtils.loadTexture("img/icon_beacon-reject_aktiv.svg");
+
+beaconPics.push(beaconTexture0);
+beaconPics.push(beaconTexture1);
+
+activeBeaconPics.push(activeBeaconTexture0);
+activeBeaconPics.push(activeBeaconTexture1);
 
 var select = new THREE.Mesh(
   new THREE.BoxGeometry( 15 * size, 30 * size, 1 ),
@@ -584,7 +586,7 @@ function createList(_model, _i, _object, _specificText, _specificText2){
   _specificText.position.x = xShift * size + 10 * size;
   _specificText.position.z = -28;
   _object.position.x = xShift * size - 35 * size;
-  _object.position.z = -26;
+  _object.position.z = -32;
   objectBackground.position.x = xShift * size;
   objectBackground.position.z = -18;
   //objects.push(object);
@@ -672,6 +674,8 @@ window.setInterval(function() {
       //videoScene.add(crosshair);
       //crosshair.material.color.setHex( 0xFF0000 );
       delete markers[i];
+      if(i == 0) marker0 = false;
+      if(i == 64) marker64 = false;
       scene.remove(r.model);
     }
     r.age++;
@@ -685,92 +689,116 @@ window.setInterval(function() {
     if (!m.model) {
       m.model = Obj3D;
 
-      selectCounter = 0;
       m.model.matrixAutoUpdate = false;
 
       if(markers[0]) {
-        openWatchMenu();
-        quantity = 3;
-        //RIGHTSIDE List with selection
-        for (var i = 0; i < quantity; i++) {
-          if(selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({map: activeSelectionPics[i], transparent: true}));
-          else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({map: selectionPics[i], transparent: true}));
+        if (marker0 == false) {
+          marker0 = true;
+          //openWatchMenu();
+          quantity = 3;
+          //RIGHTSIDE List with selection
+          for (var i = 0; i < quantity; i++) {
+            if (selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+              map: activeSelectionPics[i],
+              transparent: true
+            }));
+            else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+              map: selectionPics[i],
+              transparent: true
+            }));
 
-          var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[i]);
+            var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[i]);
 
-          var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
+            var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
 
-          createList(m.model, i, object, specificText, modeText);
+            createList(m.model, i, object, specificText, modeText);
+          }
+
+          // LEFTSIDE Batterystatus
+          var batteryGeometry = new THREE.BoxGeometry(10 * size, 30 * size, 1);
+
+          switch (batteryCall) {
+            case 2:
+              var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[2]}));
+              break;
+
+            case 1:
+              var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[1]}));
+              break;
+
+            case 0:
+            default:
+              var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({
+                map: batteryState[0],
+                transparent: true
+              }));
+              break;
+          }
+          batteryObject.position.x = (xShift * size + 10 * size) * (-1);
+          batteryObject.position.z = -28;
+          m.model.add(batteryObject);
+
+          var canvasBattery = document.createElement('canvas');
+          canvasBattery.width = 1000;
+          canvasBattery.height = 500;
+
+          // draw the score of "cockpit" to the canvas
+          var contextBattery = canvasBattery.getContext('2d');
+          contextBattery.font = "Bold 400px Helvetica";
+          contextBattery.fillStyle = "rgba(255,255,255,0.95)";
+          contextBattery.fillText(batteryCall + '%', 0, 300);
+
+          // use canvas contents as a texture
+          var textureBattery = new THREE.Texture(canvasBattery);
+          textureBattery.needsUpdate = true;
+
+          var materialBattery = new THREE.MeshBasicMaterial({
+            map: textureBattery,
+            transparent: true
+          });
+
+          var batteryBackground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+            color: 0x000000,
+            transparent: true,
+            opacity: 0.75
+          }));
+
+          var batteryText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), materialBattery);
+
+          batteryBackground.position.x = xShift * size * (-1);
+          batteryBackground.position.z = -20;
+          batteryText.position.y = -3 * size;
+          batteryText.position.x = (xShift * size - 30 * size) * (-1);
+          batteryText.position.z = -28;
+
+          m.model.add(batteryBackground);
+          m.model.add(batteryText);
+          //videoScene.remove(crosshair);
         }
-
-        // LEFTSIDE Batterystatus
-        var batteryGeometry = new THREE.BoxGeometry(10 * size, 30 * size, 1);
-
-        switch(batteryCall) {
-          case 2:
-            var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[2]}));
-            break;
-
-          case 1:
-            var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[1]}));
-            break;
-
-          case 0: default:
-          var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0],
-            transparent: true}));
-          break;
-        }
-        batteryObject.position.x = (xShift * size + 10 * size) * (-1);
-        batteryObject.position.z = -28;
-        m.model.add(batteryObject);
-
-        var canvasBattery = document.createElement('canvas');
-        canvasBattery.width = 1000;
-        canvasBattery.height = 500;
-
-        // draw the score of "cockpit" to the canvas
-        var contextBattery = canvasBattery.getContext('2d');
-        contextBattery.font = "Bold 400px Helvetica";
-        contextBattery.fillStyle = "rgba(255,255,255,0.95)";
-        contextBattery.fillText(batteryCall + '%', 0, 300);
-
-        // use canvas contents as a texture
-        var textureBattery = new THREE.Texture(canvasBattery);
-        textureBattery.needsUpdate = true;
-
-        var materialBattery = new THREE.MeshBasicMaterial( {
-          map: textureBattery,
-          transparent: true
-        } );
-
-        var batteryBackground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 0x000000, transparent: true, opacity: 0.75}));
-
-        var batteryText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), materialBattery);
-
-        batteryBackground.position.x = xShift * size * (-1);
-        batteryBackground.position.z = -20;
-        batteryText.position.y = -3 * size;
-        batteryText.position.x = (xShift * size - 30 * size) * (-1);
-        batteryText.position.z = -28;
-
-        m.model.add(batteryBackground);
-        m.model.add(batteryText);
-        //videoScene.remove(crosshair);
       }
 
-      if(markers[64]){
-        openWatchMenu();
-        quantity = 2;
+      if(markers[64]) {
+        if (marker64 == false) {
+          marker64 = true;
+          //openWatchMenu();
+          quantity = 2;
 
-        for (var i = 0; i < quantity; i++) {
-          if(selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20, 20, 1), new THREE.MeshBasicMaterial({map: activeSelectionPics[i], transparent: true}));
-          else var object = new THREE.Mesh(new THREE.BoxGeometry(20, 20, 1), new THREE.MeshBasicMaterial({map: selectionPics[i], transparent: true}));
+          for (var i = 0; i < quantity; i++) {
+            if (selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+              map: activeBeaconPics[i],
+              transparent: true
+            }));
+            else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+              map: beaconPics[i],
+              transparent: true
+            }));
 
-          var specificText = new THREE.Mesh(new THREE.BoxGeometry(50, 20, 1), textArray[i]);
+            var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[i]);
 
-          var modeText = new THREE.Mesh(new THREE.BoxGeometry(30, 10, 1), materialMode);
+            var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
 
-          createList(m.model, i, object, specificText, modeText);
+            createList(m.model, i, object, specificText, modeText);
+          }
         }
       }
       setSelectPosition(m.model);
