@@ -688,7 +688,7 @@ window.setInterval(function() {
       if(markers[0]) {
         if (marker0 == false) {
           marker0 = true;
-          //openWatchMenu();
+          openWatchMenu();
           quantity = 3;
           //RIGHTSIDE List with selection
           for (var i = 0; i < quantity; i++) {
@@ -774,7 +774,7 @@ window.setInterval(function() {
       if(markers[64]) {
         if (marker64 == false) {
           marker64 = true;
-          //openWatchMenu();
+          openWatchMenu();
           quantity = 2;
 
           for (var i = 0; i < quantity; i++) {
