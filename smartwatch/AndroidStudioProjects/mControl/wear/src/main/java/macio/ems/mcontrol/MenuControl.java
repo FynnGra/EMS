@@ -103,6 +103,7 @@ public class MenuControl
     @Override
     protected void onResume(){
         super.onResume();
+        showMenuFragment();
     }
 
     @Override
@@ -295,8 +296,8 @@ public class MenuControl
                 List<Node> nodes = result.getNodes();
                 if(nodes.size() > 0) {
                     nodeId = nodes.get(0).getId();
+                    Log.i("nodeId", nodeId);
                 }
-                Log.i("nodeId", nodeId);
             }
         }).start();
     }

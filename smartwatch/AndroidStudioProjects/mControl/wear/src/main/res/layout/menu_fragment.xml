@@ -17,4 +17,11 @@
         android:src="@drawable/bg_menu"
         android:layout_alignParentStart="true" />
 
+    <macio.ems.mcontrol.MenuCanvasView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/canvasView"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

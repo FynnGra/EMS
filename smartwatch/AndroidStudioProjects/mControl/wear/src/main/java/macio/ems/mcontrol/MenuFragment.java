@@ -23,6 +23,9 @@ public class MenuFragment
     private MenuControl activity = null;
     private View view = null;
     private float diffX = 0, diffY = 0, downX = 0, downY = 0;
+    private MenuCanvasView ccanvasView = null;
+
+
 
 
 
@@ -47,6 +50,8 @@ public class MenuFragment
 
         view.setOnTouchListener(this);
 
+
+
         return view;
     }
 
@@ -55,6 +60,8 @@ public class MenuFragment
     @Override
     public void onStart(){
         super.onStart();
+        ccanvasView = (MenuCanvasView) activity.findViewById(R.id.canvasView);
+        ccanvasView.init();
     }
 
 
@@ -105,11 +112,13 @@ public class MenuFragment
                             activity.sendString("menu|up");
                             activity.vibrator.vibrate(Constants.VIBRATOR_LENGTH_MILLI);
 
+                            ccanvasView.showAnimation(1);
                         }
                         else{
                             Log.i("swipe", "down");
                             activity.sendString("menu|down");
                             activity.vibrator.vibrate(Constants.VIBRATOR_LENGTH_MILLI);
+                            ccanvasView.showAnimation(2);
                         }
                     }
                 }
