@@ -1,0 +1,4 @@
+window.setInterval("refreshCanvas()", 10);
+function refreshCanvas(){
+  ctx.drawImage(img, 0, 0);
+};
