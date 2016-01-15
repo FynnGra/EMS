@@ -20,8 +20,8 @@
 
 //=======================================
 
-var TIMER_INTERVAL_RENDERING = 50;
-var TIMER_INTERVAL_MARKERDETECTION_STREAM = 80;
+var TIMER_INTERVAL_RENDERING = 60;
+var TIMER_INTERVAL_MARKERDETECTION_STREAM = 60;
 
 // Video size
 var VIDEO_WIDTH = 640;    //1280(unstable) - 960 - 640 - 320(bad marker detection)
@@ -257,7 +257,8 @@ var ctx = canvas.getContext('2d');
 // To display the video, first create a texture from it.
 var videoTex = new THREE.Texture(canvas);
 videoTex.context = ctx;
-videoTex.minFilter = THREE.NearestFilter;
+videoTex.magFilter = THREE.LinearFilter;
+videoTex.minFilter = THREE.LinearFilter;
 
 // Then create a plane textured with the video.
 var plane = new THREE.Mesh(
@@ -368,7 +369,7 @@ textArray.push(materialCockpit);
 //Array for the detected markers.
 var markers = {};
 
-var size = 2;
+var size = 4;
 
 var quantity,
   position,
