@@ -47,15 +47,6 @@ public class MenuFragment
 
         view.setOnTouchListener(this);
 
-        view.findViewById(R.id.backmenu).setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View v) {
-                        activity.closeFragment();
-                        activity.sendString("close");
-                    }
-                }
-        );
-
         return view;
     }
 

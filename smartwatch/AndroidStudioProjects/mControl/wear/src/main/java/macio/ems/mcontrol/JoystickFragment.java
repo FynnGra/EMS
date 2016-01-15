@@ -39,15 +39,6 @@ public class JoystickFragment extends Fragment {
         // inflate view
         view = localInflater.inflate(R.layout.joystick_fragment, viewGroup, false);
 
-        view.findViewById(R.id.backjoystick).setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View v) {
-                        activity.closeFragment();
-                        activity.sendString("close");
-                    }
-                }
-        );
-
         return view;
     }
 
