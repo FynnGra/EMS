@@ -8,9 +8,7 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * Created by Machwam on 15.01.2016.
- */
+
 public class MenuCanvasView extends View {
 
 
@@ -65,7 +63,7 @@ public class MenuCanvasView extends View {
                 case 1:
                     //Pfeil Hoch
                     pfad.moveTo(129,86 - ani);
-                    pfad.lineTo(160, 34 - ani);
+                    pfad.lineTo(160,34 - ani);
                     pfad.lineTo(191,86 - ani);
                     canvas.drawPath(pfad, zeichenfarbe);
 

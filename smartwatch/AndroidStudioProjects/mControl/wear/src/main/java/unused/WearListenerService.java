@@ -1,4 +1,4 @@
-package macio.ems.mcontrol;
+package unused;
 
 // Nicht mehr benötigt, da jetzt Wearable.MessageApi.ListenerService verwendet wird
 
@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import macio.ems.mcontrol.Constants;
 
 
 public class WearListenerService
@@ -22,10 +23,9 @@ public class WearListenerService
             Log.i("MessageReceived", Constants.MESSAGE_PATH);
             // String nodeId =  messageEvent.getSourceNodeId();
             //                  messageEvent.getPath();
-            //                  messageEvent.getData()??;
+            //                  messageEvent.getData();
         } else {
             super.onMessageReceived( messageEvent );
-            Log.i("MessageReceived", "aökfd jkl");
         }
     }
 

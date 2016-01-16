@@ -29,21 +29,6 @@
         </service>
         -->
 
-        <!-- starting screen -->
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/noSwipeToDismiss" >
-        </activity>
-
-        <!-- Joystick -->
-        <activity
-            android:name=".RobotControl"
-            android:label="@string/title_activity_robot_control"
-            android:theme="@style/noSwipeToDismiss" >
-        </activity>
-
-        <!-- menu scrolling -->
         <activity
             android:name=".MenuControl"
             android:label="@string/title_activity_menu_control"

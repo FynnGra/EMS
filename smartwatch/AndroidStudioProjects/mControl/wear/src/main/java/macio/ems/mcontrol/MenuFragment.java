@@ -1,6 +1,5 @@
 package macio.ems.mcontrol;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -23,7 +22,7 @@ public class MenuFragment
     private MenuControl activity = null;
     private View view = null;
     private float diffX = 0, diffY = 0, downX = 0, downY = 0;
-    private MenuCanvasView ccanvasView = null;
+    private MenuCanvasView canvasView = null;
 
 
 
@@ -60,8 +59,8 @@ public class MenuFragment
     @Override
     public void onStart(){
         super.onStart();
-        ccanvasView = (MenuCanvasView) activity.findViewById(R.id.canvasView);
-        ccanvasView.init();
+        canvasView = (MenuCanvasView) activity.findViewById(R.id.canvasView);
+        canvasView.init();
     }
 
 
@@ -111,14 +110,13 @@ public class MenuFragment
                             Log.i("swipe", "up");
                             activity.sendString("menu|up");
                             activity.vibrator.vibrate(Constants.VIBRATOR_LENGTH_MILLI);
-
-                            ccanvasView.showAnimation(1);
+                            canvasView.showAnimation(1);
                         }
                         else{
                             Log.i("swipe", "down");
                             activity.sendString("menu|down");
                             activity.vibrator.vibrate(Constants.VIBRATOR_LENGTH_MILLI);
-                            ccanvasView.showAnimation(2);
+                            canvasView.showAnimation(2);
                         }
                     }
                 }
@@ -137,11 +135,6 @@ public class MenuFragment
 
     }
 
-
-
-    public void back(){
-        activity.closeFragment();
-    }
 
 
 }

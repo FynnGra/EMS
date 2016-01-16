@@ -2,7 +2,6 @@ package macio.ems.mcontrol;
 
 
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
@@ -25,8 +24,7 @@ import java.util.List;
 
 public class MenuControl
         extends     WearableActivity
-        implements  View.OnClickListener,
-                    MessageApi.MessageListener,
+        implements  MessageApi.MessageListener,
                     ConnectionCallbacks,
                     OnConnectionFailedListener {
 
@@ -89,6 +87,7 @@ public class MenuControl
         autoFragment = new AutoFragment();
 
 
+        // back button
         this.findViewById(R.id.backactivity).setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
@@ -300,15 +299,6 @@ public class MenuControl
                 }
             }
         }).start();
-    }
-
-
-
-    public void onClick(View view){
-        switch( getResources().getResourceEntryName(view.getId()) ) {
-            default:
-                Log.i("onClick", "unknown View clicked");
-        }
     }
 
 

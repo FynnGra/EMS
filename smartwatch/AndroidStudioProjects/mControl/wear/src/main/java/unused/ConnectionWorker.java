@@ -1,10 +1,11 @@
-package macio.ems.mcontrol;
+package unused;
 
 import android.os.AsyncTask;
 import android.util.Log;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+import macio.ems.mcontrol.Constants;
 
 
 /** internal class for handling the connection asynchronously
