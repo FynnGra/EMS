@@ -12,6 +12,9 @@
         },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "macio.ems.mcontrol"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
         }
     },
     "dependent_plugins": {}

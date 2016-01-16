@@ -375,7 +375,8 @@ var quantity,
   position,
   selectPosition,
   selectCounter,
-  selectedMode = -1;
+  selectedMode = -1,
+  beaconMode = -1;
 
 var xShift = 120;
 
@@ -490,6 +491,9 @@ document.onkeydown = function(e) {
 };
 */
 
+// Todo: Statusmanagement
+var inAppBrowserOpened = false;
+
 var onDataReceivedHandler = function(messageString){
   var splittedMessage = messageString.split("|");
 
@@ -513,7 +517,8 @@ var onDataReceivedHandler = function(messageString){
                   }
                   break;
             case "tap":
-              selectedMode = selectCounter;
+              if(marker0 == true) selectedMode = selectCounter;
+              if(marker64 == true) beaconMode = selectCounter;
               switch (selectCounter) {
                 case 0:
                   watchConnection.watch.sendMessage("auto");
@@ -523,7 +528,8 @@ var onDataReceivedHandler = function(messageString){
                   break;
                 case 2:
                   watchConnection.watch.sendMessage("cockpit");
-                  // video.src = "192.168.0.11:9000/?action=stream";
+                  inAppBrowserOpened = true;
+                  cordova.InAppBrowser.open('http://192.168.0.11/kotzkacke/MarkerdetektRobot/index.html', '_blank', 'location=no');
                   break;
               }
           }
@@ -532,6 +538,8 @@ var onDataReceivedHandler = function(messageString){
           switch(splittedMessage[1]) {
             case "close":
               WearMenuOpened = false;
+              if(inAppBrowserOpened)
+                cordova.InAppBrowser.close();
           }
           break;
     default: return;
@@ -782,7 +790,7 @@ window.setInterval(function() {
           quantity = 2;
 
           for (var i = 0; i < quantity; i++) {
-            if (selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+            if (beaconMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
               map: activeBeaconPics[i],
               transparent: true
             }));

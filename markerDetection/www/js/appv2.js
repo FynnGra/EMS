@@ -491,6 +491,9 @@ document.onkeydown = function(e) {
 };
 */
 
+// Todo: Statusmanagement
+var inAppBrowserOpened = false;
+
 var onDataReceivedHandler = function(messageString){
   var splittedMessage = messageString.split("|");
 
@@ -525,7 +528,8 @@ var onDataReceivedHandler = function(messageString){
                   break;
                 case 2:
                   watchConnection.watch.sendMessage("cockpit");
-                  // video.src = "192.168.0.11:9000/?action=stream";
+                  inAppBrowserOpened = true;
+                  cordova.InAppBrowser.open('http://192.168.0.11/kotzkacke/MarkerdetektRobot/index.html', '_blank', 'location=no');
                   break;
               }
           }
@@ -534,6 +538,8 @@ var onDataReceivedHandler = function(messageString){
           switch(splittedMessage[1]) {
             case "close":
               WearMenuOpened = false;
+              if(inAppBrowserOpened)
+                cordova.InAppBrowser.close();
           }
           break;
     default: return;

@@ -15,6 +15,10 @@
                         {
                             "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -37,6 +41,9 @@
         },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "macio.ems.mcontrol"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
         }
     },
     "dependent_plugins": {},
@@ -56,10 +63,20 @@
             "clobbers": [
                 "navigator.splashscreen"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+            "id": "cordova-plugin-inappbrowser.inappbrowser",
+            "pluginId": "cordova-plugin-inappbrowser",
+            "clobbers": [
+                "cordova.InAppBrowser.open",
+                "window.open"
+            ]
         }
     ],
     "plugin_metadata": {
         "net.trentgardner.cordova.androidwear": "0.0.3",
-        "cordova-plugin-splashscreen": "3.0.0"
+        "cordova-plugin-splashscreen": "3.0.0",
+        "cordova-plugin-inappbrowser": "1.1.1"
     }
 }
