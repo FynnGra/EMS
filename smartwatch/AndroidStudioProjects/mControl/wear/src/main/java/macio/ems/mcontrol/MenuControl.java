@@ -93,7 +93,7 @@ public class MenuControl
                 new View.OnClickListener() {
                     public void onClick(View v) {
                         closeFragment();
-                        sendString("close");
+                        sendString("mode|close");
                     }
                 }
         );
