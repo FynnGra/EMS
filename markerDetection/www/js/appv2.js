@@ -369,7 +369,7 @@ textArray.push(materialCockpit);
 //Array for the detected markers.
 var markers = {};
 
-var size = 4;
+var size = 3;
 
 var quantity,
   position,
@@ -500,14 +500,14 @@ var onDataReceivedHandler = function(messageString){
           switch(splittedMessage[1]) {
             case "up":
                   if(selectCounter > 0) {
-                    select.position.y = selectPosition + 35;
+                    select.position.y = selectPosition + 35 * size;
                     selectPosition = select.position.y;
                     selectCounter--;
                   }
                   break;
             case "down":
                   if(selectCounter < (quantity - 1)) {
-                    select.position.y = selectPosition - 35;
+                    select.position.y = selectPosition - 35 * size;
                     selectPosition = select.position.y;
                     selectCounter++;
                   }
@@ -586,9 +586,6 @@ function createList(_model, _i, _object, _specificText, _specificText2){
       if ((_i + 1) % 2 == 0) position += 35;
     }
   }
-  //position = position*2;
-  // AXIS both x and y
-  //object.lookAt(scene.position);
   _specificText2.position.x = xShift * size;
   _specificText2.position.z = -22;
   _specificText.position.x = xShift * size + 10 * size;
@@ -605,11 +602,11 @@ function createList(_model, _i, _object, _specificText, _specificText2){
 }
 
 function setSelectPosition(_model){
-  if(quantity > 3) selectPosition = (quantity - 3) * 35;
-  else if(quantity == 3 || quantity == 1) selectPosition = 35;
+  if(quantity > 3) selectPosition = (quantity - 3) * 35 * size;
+  else if(quantity == 3 || quantity == 1) selectPosition = 35 * size;
   else selectPosition = 0;
 
-  select.position.y = selectPosition * size;
+  select.position.y = selectPosition;
   select.position.z = -18;
   selectCounter = 0;
   _model.add(select);
