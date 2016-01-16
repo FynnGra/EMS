@@ -375,7 +375,8 @@ var quantity,
   position,
   selectPosition,
   selectCounter,
-  selectedMode = -1;
+  selectedMode = -1,
+  beaconMode = -1;
 
 var xShift = 120;
 
@@ -513,7 +514,8 @@ var onDataReceivedHandler = function(messageString){
                   }
                   break;
             case "tap":
-              selectedMode = selectCounter;
+              if(marker0 == true) selectedMode = selectCounter;
+              if(marker64 == true) beaconMode = selectCounter;
               switch (selectCounter) {
                 case 0:
                   watchConnection.watch.sendMessage("auto");
@@ -782,7 +784,7 @@ window.setInterval(function() {
           quantity = 2;
 
           for (var i = 0; i < quantity; i++) {
-            if (selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+            if (beaconMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
               map: activeBeaconPics[i],
               transparent: true
             }));
