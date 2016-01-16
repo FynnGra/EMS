@@ -163,7 +163,13 @@ public class JoystickView extends View implements Runnable {
 */
         // painting the move button
         // canvas.drawCircle(xPosition, yPosition, buttonRadius, button);
-        canvas.drawBitmap(nipple, (xPosition-75), (yPosition-75), null);
+
+        canvas.drawBitmap(
+                nipple,
+                (xPosition - nipple.getWidth()/2),
+                (yPosition - nipple.getHeight()/2),
+                null
+        );
     }
 
     @Override
