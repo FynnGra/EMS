@@ -17,6 +17,8 @@ public class MenuCanvasView extends View {
     int arrow = 0;
     private Paint zeichenfarbe = new Paint();
 
+    int ani = -1;
+
 
 
     public MenuCanvasView(Context context) {
@@ -40,6 +42,7 @@ public class MenuCanvasView extends View {
 
     public void showAnimation(int i){
         arrow = i;
+        ani = 0;
         invalidate();
     }
 
@@ -51,33 +54,38 @@ public class MenuCanvasView extends View {
         int hoehe = canvas.getHeight();
         int breite = canvas.getWidth();
         */
-
-        switch (arrow){
-            case 1:
-                //Pfeil Hoch
-                pfad.moveTo(129,86);
-                pfad.lineTo(160,34);
-                pfad.lineTo(191,86);
-                canvas.drawPath(pfad,zeichenfarbe);
-
-                arrow = 0;
-                this.postInvalidateDelayed(200);
-                break;
-            case 2:
-                //Pfeil runter
-                pfad.moveTo(129,239);
-                pfad.lineTo(159,292);
-                pfad.lineTo(191,239);
-                canvas.drawPath(pfad,zeichenfarbe);
-
-                arrow = 0;
-                this.postInvalidateDelayed(250);
-                break;
-            default:
-                break;
+        if(ani > 100){
+            ani = -1;
+            arrow = 0;
         }
 
+        if(ani >= 0){
 
+            switch (arrow){
+                case 1:
+                    //Pfeil Hoch
+                    pfad.moveTo(129,86 - ani);
+                    pfad.lineTo(160, 34 - ani);
+                    pfad.lineTo(191,86 - ani);
+                    canvas.drawPath(pfad, zeichenfarbe);
+
+                    ani += 4;
+                    this.postInvalidateDelayed(1);
+                    break;
+                case 2:
+                    //Pfeil runter
+                    pfad.moveTo(129,239 + ani);
+                    pfad.lineTo(159,292 + ani);
+                    pfad.lineTo(191,239 + ani);
+                    canvas.drawPath(pfad, zeichenfarbe);
+
+                    ani += 4;
+                    this.postInvalidateDelayed(1);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
 

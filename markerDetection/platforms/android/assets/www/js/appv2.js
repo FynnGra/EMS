@@ -491,45 +491,52 @@ document.onkeydown = function(e) {
 */
 
 var onDataReceivedHandler = function(messageString){
-  switch(messageString) {
-    case "menu|up":
-      if(selectCounter > 0) {
-        select.position.y = selectPosition + 35;
-        selectPosition = select.position.y;
-        selectCounter--;
-      }
-      break;
+  var splittedMessage = messageString.split("|");
 
-    case "menu|down":
-      if(selectCounter < (quantity - 1)) {
-        select.position.y = selectPosition - 35;
-        selectPosition = select.position.y;
-        selectCounter++;
-      }
-      break;
-
-    case "menu|tap":
-      selectedMode = selectCounter;
-      switch (selectCounter) {
-        case 0:
-          watchConnection.watch.sendMessage("auto");
+  switch(splittedMessage[0]) {
+    case "drive":
           break;
-        case 1:
-          watchConnection.watch.sendMessage("joystick");
+    case "menu":
+          switch(splittedMessage[1]) {
+            case "up":
+                  if(selectCounter > 0) {
+                    select.position.y = selectPosition + 35;
+                    selectPosition = select.position.y;
+                    selectCounter--;
+                  }
+                  break;
+            case "down":
+                  if(selectCounter < (quantity - 1)) {
+                    select.position.y = selectPosition - 35;
+                    selectPosition = select.position.y;
+                    selectCounter++;
+                  }
+                  break;
+            case "tap":
+              selectedMode = selectCounter;
+              switch (selectCounter) {
+                case 0:
+                  watchConnection.watch.sendMessage("auto");
+                  break;
+                case 1:
+                  watchConnection.watch.sendMessage("joystick");
+                  break;
+                case 2:
+                  watchConnection.watch.sendMessage("cockpit");
+                  // video.src = "192.168.0.11:9000/?action=stream";
+                  break;
+              }
+          }
           break;
-        case 2:
-          watchConnection.watch.sendMessage("cockpit");
-          // video.src = "192.168.0.11:9000/?action=stream";
+    case "mode":
+          switch(splittedMessage[1]) {
+            case "close":
+              WearMenuOpened = false;
+          }
           break;
-      }
-      break;
-
-    case "close":
-      WearMenuOpened = false;
-      break;
-
-    default: return; // exit this handler for other keys
+    default: return;
   }
+
 };
 
 
@@ -823,11 +830,12 @@ angular.module('starter', ['ionic'])
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);
       }
-
+/*
       ionic.Platform.fullScreen();
       if(window.StatusBar) {
         StatusBar.styleDefault();
       }
+*/
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       }

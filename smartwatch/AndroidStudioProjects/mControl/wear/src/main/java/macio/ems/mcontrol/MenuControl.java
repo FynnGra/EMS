@@ -94,6 +94,7 @@ public class MenuControl
                     public void onClick(View v) {
                         closeFragment();
                         sendString("mode|close");
+                        vibrator.vibrate(Constants.VIBRATOR_LENGTH_MILLI);
                     }
                 }
         );
@@ -103,7 +104,6 @@ public class MenuControl
     @Override
     protected void onResume(){
         super.onResume();
-        showMenuFragment();
     }
 
     @Override
@@ -143,7 +143,7 @@ public class MenuControl
      **********************************************************************************************/
     @Override
     public void onMessageReceived(MessageEvent messageEvent ) {
-        Toast.makeText(this, "EMPFANGEN: " + new String(messageEvent.getData()), Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "EMPFANGEN: " + new String(messageEvent.getData()), Toast.LENGTH_SHORT).show();
         // String nodeId =  messageEvent.getSourceNodeId();
         //                  messageEvent.getPath();
 
