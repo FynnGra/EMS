@@ -67,7 +67,7 @@ public class JoystickFragment extends Fragment {
                 // Log.i("Joystick: ", "[" + angle + "|" + power + "|" + direction + "]");
                 calculateControls(angle, power, direction);
             }
-        }, 100);
+        }, Constants.JOYSTICK_REFRESH_INTERVAL_MILLIS);
     }
 
 
