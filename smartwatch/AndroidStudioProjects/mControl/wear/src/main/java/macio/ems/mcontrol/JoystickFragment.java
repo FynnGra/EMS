@@ -64,7 +64,7 @@ public class JoystickFragment extends Fragment {
         joystick.setOnJoystickMoveListener(new JoystickView.OnJoystickMoveListener() {
             @Override
             public void onValueChanged(int angle, int power, int direction) {
-                // Log.i("Joystick: ", "[" + angle + "|" + power + "|" + direction + "]");
+                // Log.i("Joystick: ", "[" + direction + "|" + angle + "]");
                 calculateControls(angle, power, direction);
             }
         }, Constants.JOYSTICK_REFRESH_INTERVAL_MILLIS);
@@ -88,10 +88,10 @@ public class JoystickFragment extends Fragment {
             roboDirection = (int) ((angle/90.0)*100.0);
         // rückwärts
         else{
+            roboSpeed *= -1;
             // rechts
             if(angle < 0)
-
-                roboDirection = (int) (( ((180 + angle)*-1) /90.0)*100.0);
+                roboDirection = (int) (( ((180 + angle)) /90.0)*100.0);
             // links
             else if(angle > 0)
                 roboDirection = (int) (( ((180 - angle)*-1) /90.0)*100.0);
