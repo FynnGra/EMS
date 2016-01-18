@@ -379,8 +379,6 @@ var quantity,
   selectedMode = -1,
   beaconMode = -1;
 
-var obj3d;
-
 var xShift = 120;
 
 //Array for the created cubes, not used so far
@@ -526,7 +524,6 @@ var onDataReceivedHandler = function(messageString){
             case "tap":
               if(marker0 == true) selectedMode = selectCounter;
               if(marker64 == true) beaconMode = selectCounter;
-              obj3d.matrixWorldNeedsUpdate = true;
               switch (selectCounter) {
                 case 0:
                   watchConnection.watch.sendMessage("auto");
@@ -728,7 +725,6 @@ var setMainInterval = function() {
 
       if (!m.model) {
         m.model = new THREE.Object3D();
-        obj3d = m.model;
 
         m.model.matrixAutoUpdate = false;
 
