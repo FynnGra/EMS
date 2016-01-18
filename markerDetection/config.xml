@@ -14,12 +14,12 @@
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
-
+<!--
   <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="300"/>
   <preference name="AutoHideSplashScreen" value="true" />
   <preference name="ShowSplashScreenSpinner" value="true" />
-
+-->
   <preference name="orientation" value="landscape" />
   <preference name="Fullscreen" value="true" />
   <feature name="StatusBar">

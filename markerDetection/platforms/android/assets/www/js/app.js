@@ -18,8 +18,8 @@
 
 //=======================================
 
-var TIMER_INTERVAL_RENDERING = 60;
-var TIMER_INTERVAL_MARKERDETECTION_STREAM = 60;
+var TIMER_INTERVAL_RENDERING = 50;
+var TIMER_INTERVAL_MARKERDETECTION_STREAM = 50;
 
 // Video size
 var VIDEO_WIDTH = 640;    //1280(unstable) - 960 - 640 - 320(bad marker detection)
