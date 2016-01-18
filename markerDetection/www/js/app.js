@@ -399,11 +399,11 @@ textures.push(texture3);
 var batteryCall = 0;
 
 var batteryState = [];
-var batteryTexture0 = THREE.ImageUtils.loadTexture("img/icon_battery_error.svg"),
-  batteryTexture1 = THREE.ImageUtils.loadTexture("img/icon_battery_0.svg"),
-  batteryTexture2 = THREE.ImageUtils.loadTexture("img/icon_battery_1.svg"),
-  batteryTexture3 = THREE.ImageUtils.loadTexture("img/icon_battery_2.svg"),
-  batteryTexture4 = THREE.ImageUtils.loadTexture("img/icon_battery_3.svg");
+var batteryTexture0 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_error.svg"),
+  batteryTexture1 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_0.svg"),
+  batteryTexture2 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_1.svg"),
+  batteryTexture3 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_2.svg"),
+  batteryTexture4 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_3.svg");
 
 batteryState.push(batteryTexture0);
 batteryState.push(batteryTexture1);
@@ -557,6 +557,7 @@ var onDataReceivedHandler = function(messageString){
     case "mode":
           switch(splittedMessage[1]) {
             case "close":
+              selectedMode = -1;
               WearMenuOpened = false;
 
               mRobotControl.stopAutoDrive();
@@ -627,12 +628,11 @@ function createList(_model, _i, _object, _specificText, _specificText2){
   _specificText2.position.x = xShift * size;
   _specificText2.position.z = -22;
   _specificText.position.x = xShift * size + 10 * size;
-  _specificText.position.z = -28;
+  _specificText.position.z = -36;
   _object.position.x = xShift * size - 35 * size;
-  _object.position.z = -32;
+  _object.position.z = -40;
   objectBackground.position.x = xShift * size;
   objectBackground.position.z = -18;
-  //objects.push(object);
   _model.add(objectBackground);
   _model.add(_object);
   _model.add(_specificText2);
@@ -756,23 +756,13 @@ var setMainInterval = function() {
 
             batteryCall = mRobotControl.getBattery();
 
-            switch (batteryCall) {
-              case 2:
-                var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[2]}));
-                break;
+            if(batteryCall == 0) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0]}));
+            else if(batteryCall < 25) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[1]}));
+            else if (batteryCall < 50) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[2]}));
+            else if (batteryCall < 75) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[3]}));
+            else if (batteryCall < 101) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[4]}));
+            else var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0]}));
 
-              case 1:
-                var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[1]}));
-                break;
-
-              case 0:
-              default:
-                var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({
-                  map: batteryState[0],
-                  transparent: true
-                }));
-                break;
-            }
             batteryObject.position.x = (xShift * size + 10 * size) * (-1);
             batteryObject.position.z = -28;
             m.model.add(batteryObject);
@@ -808,7 +798,7 @@ var setMainInterval = function() {
             batteryBackground.position.z = -20;
             batteryText.position.y = -3 * size;
             batteryText.position.x = (xShift * size - 30 * size) * (-1);
-            batteryText.position.z = -28;
+            batteryText.position.z = -36;
 
             m.model.add(batteryBackground);
             m.model.add(batteryText);
