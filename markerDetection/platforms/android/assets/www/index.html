@@ -1,7 +1,8 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *">-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title>Augmented Reality App</title>
 
@@ -45,8 +46,10 @@
   <body ng-app="starter" class="platform-android platform-cordova platform-webview">
     <ion-pane>
       <ion-content scroll="false" padding="false">
-        <webcamleft-gl id="left"></webcamleft-gl>
-        <webcamright-gl id="right"></webcamright-gl>
+        <div id="main">
+          <webcamleft-gl id="left"></webcamleft-gl>
+          <webcamright-gl id="right"></webcamright-gl>
+        </div>
       </ion-content>
     </ion-pane>
   </body>

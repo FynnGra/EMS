@@ -18,4 +18,6 @@
         <service android:enabled="true" android:name="net.trentgardner.cordova.androidwear.WearProviderService" android:process=":remote" />
     </application>
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="22" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 </manifest>

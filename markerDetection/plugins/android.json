@@ -15,6 +15,18 @@
         },
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "macio.ems.mcontrol"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
+        },
+        "cordova-plugin-device-motion": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
         }
     },
     "dependent_plugins": {}

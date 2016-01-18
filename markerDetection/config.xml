@@ -14,16 +14,16 @@
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
- 
+
   <preference name="SplashScreen" value="screen"/>
-  <preference name="SplashScreenDelay" value="1000"/>
-  <preference name="AutoHideSplashScreen" value="false" />
-  <preference name="ShowSplashScreenSpinner" value="false" />
- 
-  <preference name="orientation" value="landscape" /> 
+  <preference name="SplashScreenDelay" value="300"/>
+  <preference name="AutoHideSplashScreen" value="true" />
+  <preference name="ShowSplashScreenSpinner" value="true" />
+
+  <preference name="orientation" value="landscape" />
   <preference name="Fullscreen" value="true" />
   <feature name="StatusBar">
-    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+    <param name="ios-package" value="CDVStatusBar" onload="false"/>
   </feature>
   <platform name="android">
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>

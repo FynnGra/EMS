@@ -96,7 +96,7 @@ mRobot.control.driveRobot = function (speed, direction) {
 
 mRobot.control.calculation = function (speedData, directionData) {
     // set current data
-    directionData = directionData * 10; // direction
+    directionData = directionData * 10 * (-1); // direction
     speedData = speedData * 10; // acceleration
 
     // cut high/low values

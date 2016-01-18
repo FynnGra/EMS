@@ -19,6 +19,22 @@
                         {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Accelerometer\"><param name=\"android-package\" value=\"org.apache.cordova.devicemotion.AccelListener\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Compass\"><param name=\"android-package\" value=\"org.apache.cordova.deviceorientation.CompassListener\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -28,6 +44,16 @@
                     "/manifest/application": [
                         {
                             "xml": "<service android:enabled=\"true\" android:name=\"net.trentgardner.cordova.androidwear.WearProviderService\" android:process=\":remote\"></service>",
+                            "count": 1
+                        }
+                    ],
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
                             "count": 1
                         }
                     ]
@@ -43,6 +69,18 @@
             "PACKAGE_NAME": "macio.ems.mcontrol"
         },
         "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
+        },
+        "cordova-plugin-device-motion": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "macio.ems.mcontrol"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "macio.ems.mcontrol"
         }
     },
@@ -72,11 +110,69 @@
                 "cordova.InAppBrowser.open",
                 "window.open"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device/www/device.js",
+            "id": "cordova-plugin-device.device",
+            "pluginId": "cordova-plugin-device",
+            "clobbers": [
+                "device"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device-motion/www/Acceleration.js",
+            "id": "cordova-plugin-device-motion.Acceleration",
+            "pluginId": "cordova-plugin-device-motion",
+            "clobbers": [
+                "Acceleration"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device-motion/www/accelerometer.js",
+            "id": "cordova-plugin-device-motion.accelerometer",
+            "pluginId": "cordova-plugin-device-motion",
+            "clobbers": [
+                "navigator.accelerometer"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device-orientation/www/CompassError.js",
+            "id": "cordova-plugin-device-orientation.CompassError",
+            "pluginId": "cordova-plugin-device-orientation",
+            "clobbers": [
+                "CompassError"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device-orientation/www/CompassHeading.js",
+            "id": "cordova-plugin-device-orientation.CompassHeading",
+            "pluginId": "cordova-plugin-device-orientation",
+            "clobbers": [
+                "CompassHeading"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device-orientation/www/compass.js",
+            "id": "cordova-plugin-device-orientation.compass",
+            "pluginId": "cordova-plugin-device-orientation",
+            "clobbers": [
+                "navigator.compass"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-whitelist/whitelist.js",
+            "id": "cordova-plugin-whitelist.whitelist",
+            "pluginId": "cordova-plugin-whitelist",
+            "runs": true
         }
     ],
     "plugin_metadata": {
         "net.trentgardner.cordova.androidwear": "0.0.3",
         "cordova-plugin-splashscreen": "3.0.0",
-        "cordova-plugin-inappbrowser": "1.1.1"
+        "cordova-plugin-inappbrowser": "1.1.1",
+        "cordova-plugin-device": "1.1.0",
+        "cordova-plugin-device-motion": "1.2.0",
+        "cordova-plugin-device-orientation": "1.0.2",
+        "cordova-plugin-whitelist": "1.2.2-dev"
     }
 }
