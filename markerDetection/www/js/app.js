@@ -452,7 +452,6 @@ var select = new THREE.Mesh(
   }));
 select.position.x = xShift * size + 60 * size;
 
-//TESTAREA START
 /*
 document.onkeydown = function(e) {
   e = e || window.event;
@@ -524,6 +523,7 @@ var onDataReceivedHandler = function(messageString){
             case "tap":
               if(marker0 == true) selectedMode = selectCounter;
               if(marker64 == true) beaconMode = selectCounter;
+              // Todo : Listupdate for icons
               switch (selectCounter) {
                 case 0:
                   watchConnection.watch.sendMessage("auto");
@@ -649,13 +649,11 @@ function setSelectPosition(_model){
   selectCounter = 0;
   _model.add(select);
 }
-//TESTAREA END
 
 var WearMenuOpened = false;
 var openWatchMenu = function() {
   if(!WearMenuOpened){
     watchConnection.watch.sendMessage("menu");
-    // alert("test");
     WearMenuOpened = true;
   }
 };
@@ -802,7 +800,6 @@ var setMainInterval = function() {
 
             m.model.add(batteryBackground);
             m.model.add(batteryText);
-            //videoScene.remove(crosshair);
           }
         }
 
@@ -822,11 +819,13 @@ var setMainInterval = function() {
                 transparent: true
               }));
 
-              var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[i]);
+              // Todo : insert ARRAY
 
-              var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
+              var beaconSpecificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), beaconTextArray[i]);
 
-              createList(m.model, i, object, specificText, modeText);
+              var beaconModeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), beaconMaterialMode);
+
+              createList(m.model, i, object, beaconSpecificText, beaconModeText);
             }
           }
         }
