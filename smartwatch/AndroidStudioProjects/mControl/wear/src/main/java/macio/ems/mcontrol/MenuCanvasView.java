@@ -33,9 +33,9 @@ public class MenuCanvasView extends View {
 
     public void init(){
         zeichenfarbe.setAntiAlias(true);
-        zeichenfarbe.setColor(Color.rgb(131,173,183));
+        zeichenfarbe.setColor(Color.rgb(0,73,90));
         zeichenfarbe.setStyle(Paint.Style.STROKE);
-        zeichenfarbe.setStrokeWidth(7);
+        zeichenfarbe.setStrokeWidth(6);
     }
 
     public void showAnimation(int i){
@@ -62,9 +62,9 @@ public class MenuCanvasView extends View {
             switch (arrow){
                 case 1:
                     //Pfeil Hoch
-                    pfad.moveTo(129,86 - ani);
-                    pfad.lineTo(160,34 - ani);
-                    pfad.lineTo(191,86 - ani);
+                    pfad.moveTo(133,86 - ani);
+                    pfad.lineTo(160,38 - ani);
+                    pfad.lineTo(187,86 - ani);
                     canvas.drawPath(pfad, zeichenfarbe);
 
                     ani += 4;
@@ -72,9 +72,9 @@ public class MenuCanvasView extends View {
                     break;
                 case 2:
                     //Pfeil runter
-                    pfad.moveTo(129,239 + ani);
-                    pfad.lineTo(159,292 + ani);
-                    pfad.lineTo(191,239 + ani);
+                    pfad.moveTo(133,239 + ani);
+                    pfad.lineTo(159,288 + ani);
+                    pfad.lineTo(187,239 + ani);
                     canvas.drawPath(pfad, zeichenfarbe);
 
                     ani += 4;
