@@ -62,7 +62,7 @@ var watchConnection = {
     var self = this;
     if(AndroidWear)
       AndroidWear.onConnect(
-        function(message){ self.watch = new watch(message.handle); }
+        function(proxy){ self.watch = new watch(proxy.handle); }
       );
   }
 

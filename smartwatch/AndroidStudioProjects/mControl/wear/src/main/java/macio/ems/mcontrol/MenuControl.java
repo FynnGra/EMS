@@ -108,7 +108,7 @@ public class MenuControl
     @Override
     protected void onStop(){
         super.onStop();
-        // sendString("close");
+        sendString("mode|close");
 
         mGoogleApiClient.disconnect();
         Wearable.MessageApi.removeListener(mGoogleApiClient, this);
