@@ -132,19 +132,19 @@ mRobot.control.calculation = function (speedData, directionData) {
     }
 
     // angle to direction
-    if (directionCalculated < 80 && directionCalculated >= 0) {
+    if (directionCalculated < 90 && directionCalculated >= 0) {
         directionCalculated *= 1.25;
-    } else if (directionCalculated > 100 && directionCalculated < 260) {
+    } else if (directionCalculated > 90 && directionCalculated < 270) {
         directionCalculated = (directionCalculated - 180) * (-1.25);
-    } else if (directionCalculated > 280) {
+    } else if (directionCalculated > 270) {
         directionCalculated = (directionCalculated - 360) * 1.25;
-    } else if (directionCalculated >= 80 && directionCalculated <= 100) {
+    }/* else if (directionCalculated >= 80 && directionCalculated <= 100) {
         directionCalculated = Math.abs((directionCalculated - 270)) * (-10);
         speedCalculated = (speedCalculated / 100) * directionCalculated;
     } else if (directionCalculated >= 260 && directionCalculated <= 280) {
         directionCalculated = Math.abs((directionCalculated - 270) * 10);
         speedCalculated = (speedCalculated / 100) * directionCalculated;
-    }
+    }*/
 
     return {
         speed: speedCalculated,

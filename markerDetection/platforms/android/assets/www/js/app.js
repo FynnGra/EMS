@@ -101,8 +101,8 @@ video.autoplay = true;
 // In this case it's not needed, because we use Android WebView anyway and
 // therefore Chrome only.
 navigator.getUserMedia = (navigator.getUserMedia ||
-                          navigator.webkitGetUserMedia ||
-                          navigator.mozGetUserMedia);
+navigator.webkitGetUserMedia ||
+navigator.mozGetUserMedia);
 
 // This function goes through all video sources of the users device.
 // It selects ONLY the last camera found, which is the rear camera, as the media stream source.
@@ -151,13 +151,13 @@ function sourceSelected(videoSource) {
 
 
 var elementLeft,
-  elementRight,
-  containerLeft,
-  containerRight,
-  raster,
-  param,
-  resultMat,
-  detector;
+    elementRight,
+    containerLeft,
+    containerRight,
+    raster,
+    param,
+    resultMat,
+    detector;
 
 // The threshold parameter determines the threshold value
 // for turning the video frame into a 1-bit black-and-white image.
@@ -169,12 +169,12 @@ canvas.width = video.width;
 canvas.height = video.height;
 // Use this section to set the canvas size value as a power of two.
 /*canvas.width = nextPowerOf2(video.width);
-canvas.height = nextPowerOf2(video.height);
-console.log("canvasWidth: " + canvas.width + "canvasHeight: " + canvas.height);
+ canvas.height = nextPowerOf2(video.height);
+ console.log("canvasWidth: " + canvas.width + "canvasHeight: " + canvas.height);
 
-function nextPowerOf2(x){
-  return Math.pow(2, Math.ceil(Math.log(x) / Math.log(2)));
-}*/
+ function nextPowerOf2(x){
+ return Math.pow(2, Math.ceil(Math.log(x) / Math.log(2)));
+ }*/
 
 // I'm going to use a glMatrix-style matrix as an intermediary.
 // So the first step is to create a function to convert a glMatrix matrix into a Three.js Matrix4.
@@ -280,53 +280,9 @@ videoScene.add(plane);
 videoScene.add(videoCam);
 
 // TESTAREA START
-var beaconTextArray = [];
 var textArray = [];
 
 // Todo : canvas Größe anpassen
-
-// create canvas
-var beaconCanvasMode = document.createElement('canvas');
-beaconCanvasMode.width = 1000;
-beaconCanvasMode.height = 500;
-
-// draw the score of "mode" to the canvas
-var beaconContextMode = beaconCanvasMode.getContext('2d');
-beaconContextMode.font = "Bold 200px Helvetica";
-beaconContextMode.fillStyle = "rgba(255,255,255,0.95)";
-beaconContextMode.fillText('allow', 0, 300);
-
-// use canvas contents as a texture
-var beaconTextureMode = new THREE.Texture(beaconCanvasMode);
-beaconTextureMode.needsUpdate = true;
-
-var beaconMaterialMode = new THREE.MeshBasicMaterial( {
-  map: beaconTextureMode,
-  transparent: true
-} );
-
-// create canvas
-var beaconCanvasMode2 = document.createElement('canvas');
-beaconCanvasMode2.width = 1000;
-beaconCanvasMode2.height = 500;
-
-// draw the score of "mode" to the canvas
-var beaconContextMode2 = beaconCanvasMode2.getContext('2d');
-beaconContextMode2.font = "Bold 200px Helvetica";
-beaconContextMode2.fillStyle = "rgba(255,255,255,0.95)";
-beaconContextMode2.fillText('deny', 0, 300);
-
-// use canvas contents as a texture
-var beaconTextureMode2 = new THREE.Texture(beaconCanvasMode2);
-beaconTextureMode2.needsUpdate = true;
-
-var beaconMaterialMode2 = new THREE.MeshBasicMaterial( {
-  map: beaconTextureMode2,
-  transparent: true
-} );
-
-beaconTextArray.push(beaconMaterialMode);
-beaconTextArray.push(beaconMaterialMode2);
 
 // create canvas
 var canvasMode = document.createElement('canvas');
@@ -415,25 +371,25 @@ textArray.push(materialCockpit);
 //Array for the detected markers.
 var markers = {};
 
-var size = 2.5;
+var size = 3;
 
 var quantity,
-  position,
-  selectPosition,
-  selectCounter,
-  selectedMode = -1,
-  beaconMode = -1;
+    position,
+    selectPosition,
+    selectCounter,
+    selectedMode = -1,
+    beaconMode = -1;
 
-var xShift = 100;
+var xShift = 120;
 
 //Array for the created cubes, not used so far
 var objects = [];
 //Textures for the created cubes
 var textures = [];
 var texture0 = THREE.ImageUtils.loadTexture("img/testjpg.jpg"),
-  texture1 = THREE.ImageUtils.loadTexture("img/ionic.png"),
-  texture2 = THREE.ImageUtils.loadTexture("img/testpng.png"),
-  texture3 = THREE.ImageUtils.loadTexture("img/icon_battery_0.svg");
+    texture1 = THREE.ImageUtils.loadTexture("img/ionic.png"),
+    texture2 = THREE.ImageUtils.loadTexture("img/testpng.png"),
+    texture3 = THREE.ImageUtils.loadTexture("img/icon_battery_0.svg");
 
 textures.push(texture0);
 textures.push(texture1);
@@ -445,10 +401,10 @@ var batteryCall = 0;
 
 var batteryState = [];
 var batteryTexture0 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_error.svg"),
-  batteryTexture1 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_0.svg"),
-  batteryTexture2 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_1.svg"),
-  batteryTexture3 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_2.svg"),
-  batteryTexture4 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_3.svg");
+    batteryTexture1 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_0.svg"),
+    batteryTexture2 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_1.svg"),
+    batteryTexture3 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_2.svg"),
+    batteryTexture4 = THREE.ImageUtils.loadTexture("img/icon_icon_battery_3.svg");
 
 batteryState.push(batteryTexture0);
 batteryState.push(batteryTexture1);
@@ -459,12 +415,12 @@ batteryState.push(batteryTexture4);
 var selectionPics = [];
 var activeSelectionPics = [];
 var selectionTexture0 = THREE.ImageUtils.loadTexture("img/icon_automatisch_inaktiv.svg"),
-  selectionTexture1 = THREE.ImageUtils.loadTexture("img/icon_manuell_inaktiv.svg"),
-  selectionTexture2 = THREE.ImageUtils.loadTexture("img/icon_cockpit_inaktiv.svg");
+    selectionTexture1 = THREE.ImageUtils.loadTexture("img/icon_manuell_inaktiv.svg"),
+    selectionTexture2 = THREE.ImageUtils.loadTexture("img/icon_cockpit_inaktiv.svg");
 
 var activeSelectionTexture0 = THREE.ImageUtils.loadTexture("img/icon_automatisch_selected.svg"),
-  activeSelectionTexture1 = THREE.ImageUtils.loadTexture("img/icon_manuell_selected.svg"),
-  activeSelectionTexture2 = THREE.ImageUtils.loadTexture("img/icon_cockpit_aktiv.svg");
+    activeSelectionTexture1 = THREE.ImageUtils.loadTexture("img/icon_manuell_selected.svg"),
+    activeSelectionTexture2 = THREE.ImageUtils.loadTexture("img/icon_cockpit_aktiv.svg");
 
 selectionPics.push(selectionTexture0);
 selectionPics.push(selectionTexture1);
@@ -477,10 +433,10 @@ activeSelectionPics.push(activeSelectionTexture2);
 var beaconPics = [];
 var activeBeaconPics = [];
 var beaconTexture0 = THREE.ImageUtils.loadTexture("img/icon_beacon-attract_inaktiv.svg"),
-  beaconTexture1 = THREE.ImageUtils.loadTexture("img/icon_beacon-reject_inaktiv.svg");
+    beaconTexture1 = THREE.ImageUtils.loadTexture("img/icon_beacon-reject_inaktiv.svg");
 
 var activeBeaconTexture0 = THREE.ImageUtils.loadTexture("img/icon_beacon-attract_aktiv.svg"),
-  activeBeaconTexture1 = THREE.ImageUtils.loadTexture("img/icon_beacon-reject_aktiv.svg");
+    activeBeaconTexture1 = THREE.ImageUtils.loadTexture("img/icon_beacon-reject_aktiv.svg");
 
 beaconPics.push(beaconTexture0);
 beaconPics.push(beaconTexture1);
@@ -498,44 +454,45 @@ var select = new THREE.Mesh(
 select.position.x = xShift * size + 60 * size;
 
 /*
-document.onkeydown = function(e) {
-  e = e || window.event;
-  switch(e.which || e.keyCode) {
-    case 38: // up
-      if(selectCounter > 0) {
-        select.position.y = selectPosition * size + 35 * size;
-        selectPosition = select.position.y;
-        selectCounter--;
-      }
-      break;
+ document.onkeydown = function(e) {
+ e = e || window.event;
+ switch(e.which || e.keyCode) {
+ case 38: // up
+ if(selectCounter > 0) {
+ select.position.y = selectPosition * size + 35 * size;
+ selectPosition = select.position.y;
+ selectCounter--;
+ }
+ break;
 
-    case 40: // down
-      if(selectCounter < (quantity - 1)) {
-        select.position.y = selectPosition * size - 35 * size;
-        selectPosition = select.position.y;
-        selectCounter++;
-      }
-      break;
+ case 40: // down
+ if(selectCounter < (quantity - 1)) {
+ select.position.y = selectPosition * size - 35 * size;
+ selectPosition = select.position.y;
+ selectCounter++;
+ }
+ break;
 
-    case 13: // enter
-      selectedMode = selectCounter;
-      switch (selectCounter) {
-        case 0:
-          window.open('http://www.google.de', '_blank');
-          break;
-        case 1:
-          window.open('http://www.duckduckgo.de', '_blank');
-          break;
-      }
+ case 13: // enter
+ selectedMode = selectCounter;
+ switch (selectCounter) {
+ case 0:
+ window.open('http://www.google.de', '_blank');
+ break;
+ case 1:
+ window.open('http://www.duckduckgo.de', '_blank');
+ break;
+ }
 
-    default: return; // exit this handler for other keys
-  }
-  // Doesn't work yet - fix if possible
-  videoScene.matrixWorldNeedsUpdate = true;
-  e.preventDefault(); // prevent the default action (scroll / move caret)
-};
-*/
+ default: return; // exit this handler for other keys
+ }
+ // Doesn't work yet - fix if possible
+ videoScene.matrixWorldNeedsUpdate = true;
+ e.preventDefault(); // prevent the default action (scroll / move caret)
+ };
+ */
 
+// Todo: Statusmanagement
 var cockpitOpened = false;
 
 var onDataReceivedHandler = function(messageString){
@@ -543,91 +500,89 @@ var onDataReceivedHandler = function(messageString){
 
   switch(splittedMessage[0]) {
     case "drive":
-          var roboDirection = splittedMessage[1].split(",")[0];
-          var roboSpeed     = splittedMessage[1].split(",")[1];
-          mRobotControl.requestDriveControl();
-          mRobotControl.driveRobot(roboSpeed, roboDirection);
-          break;
+      var roboDirection = splittedMessage[1].split(",")[0];
+      var roboSpeed     = splittedMessage[1].split(",")[1];
+      mRobotControl.requestDriveControl();
+      mRobotControl.driveRobot(roboSpeed, roboDirection);
+      break;
     case "menu":
-          switch(splittedMessage[1]) {
-            case "up":
-                  if(selectCounter > 0) {
-                    select.position.y = selectPosition + 35 * size;
-                    selectPosition = select.position.y;
-                    selectCounter--;
-                  }
-                  break;
-            case "down":
-                  if(selectCounter < (quantity - 1)) {
-                    select.position.y = selectPosition - 35 * size;
-                    selectPosition = select.position.y;
-                    selectCounter++;
-                  }
-                  break;
-            case "tap":
-              if(marker64 == true) beaconMode = selectCounter;
-              if(marker0 == true){
-                selectedMode = selectCounter;
-                // Todo : Listupdate for icons
-                switch(selectCounter){
-                  case 0:
-                    watchConnection.watch.sendMessage("auto");
-                    mRobotControl.startAutoDrive();
-                    break;
-                  case 1:
-                    watchConnection.watch.sendMessage("joystick");
-                    break;
-                  case 2:
-                    watchConnection.watch.sendMessage("cockpit");
-                    clearInterval(mainInterval);
-                    mRobotControl.requestDriveControl();
-                    mRobotControl.startWatching();
-                    var webcamLeftGL = $("#left").hide();
-                    var webcamRightGL = $("#right").hide();
-                    var imgLeft = document.createElement('img');
-                    var imgRight = document.createElement('img');
-                    imgLeft.src = "http://192.168.0.11:9000/?action=stream";
-                    imgRight.src = "http://192.168.0.11:9000/?action=stream";
-                    $(imgLeft).css("margin-top", "10%");
-                    $(imgRight).css("margin-top", "10%");
-                    var div = document.getElementById("main");
-                    div.appendChild(imgLeft);
-                    div.appendChild(imgRight);
-                    cockpitOpened = true;
-                    //cordova.InAppBrowser.open('http://192.168.0.11/srv/MarkerdetektRobot/index.html', '_blank', 'location=no');
-                    break;
-                }
-              }
-              scene.remove(m.model);
-
-              markerFunction();
-
-              scene.add(m.model);
+      switch(splittedMessage[1]) {
+        case "up":
+          if(selectCounter > 0) {
+            select.position.y = selectPosition + 35 * size;
+            selectPosition = select.position.y;
+            selectCounter--;
           }
           break;
+        case "down":
+          if(selectCounter < (quantity - 1)) {
+            select.position.y = selectPosition - 35 * size;
+            selectPosition = select.position.y;
+            selectCounter++;
+          }
+          break;
+        case "tap":
+          // Todo : beaconMode einstellen
+          if(marker0 == true) selectedMode = selectCounter;
+          if(marker64 == true) beaconMode = selectCounter;
+          // Todo : Listupdate for icons
+          switch (selectCounter) {
+            case 0:
+              watchConnection.watch.sendMessage("auto");
+              mRobotControl.startAutoDrive();
+              break;
+            case 1:
+              watchConnection.watch.sendMessage("joystick");
+              break;
+            case 2:
+              watchConnection.watch.sendMessage("cockpit");
+              clearInterval(mainInterval);
+              setTimeout(function(){
+                mRobotControl.requestDriveControl();
+                mRobotControl.startWatching();
+              },3000);
+              var webcamLeftGL = $("#left").hide();
+              var webcamRightGL = $("#right").hide();
+              var imgLeft = document.createElement('img');
+              var imgRight = document.createElement('img');
+              imgLeft.src = "http://192.168.0.11:9000/?action=stream";
+              imgRight.src = "http://192.168.0.11:9000/?action=stream";
+              $(imgLeft).css("margin-top","10%");
+              $(imgRight).css("margin-top","10%");
+              var div = document.getElementById("main");
+              div.appendChild(imgLeft);
+              div.appendChild(imgRight);
+              cockpitOpened = true;
+              //cordova.InAppBrowser.open('http://192.168.0.11/srv/MarkerdetektRobot/index.html', '_blank', 'location=no');
+              break;
+          }
+      }
+      break;
     case "mode":
-          switch(splittedMessage[1]) {
-            case "close":
-              selectedMode = -1;
-              WearMenuOpened = false;
+      switch(splittedMessage[1]) {
+        case "close":
+          selectedMode = -1;
+          WearMenuOpened = false;
 
-              mRobotControl.stopAutoDrive();
-              mRobotControl.stopWatching();
+          mRobotControl.stopAutoDrive();
+          mRobotControl.stopWatching();
 
-              if(cockpitOpened){
-                $(imgLeft).remove();
-                $(imgRight).remove();
-                $("#left").show();
-                $("#right").show();
-                cockpitOpened = false;
-                setMainInterval();
-              }
+          if(cockpitOpened){
+            $(imgLeft).remove();
+            $(imgRight).remove();
+            $("#left").show();
+            $("#right").show();
+            cockpitOpened = false;
+            setMainInterval();
           }
-          break;
+      }
+      break;
     default: return;
   }
 
 };
+
+
 
 var geometry = new THREE.BoxGeometry(100 * size, 30 * size, 1);
 
@@ -641,7 +596,7 @@ function createList(_model, _i, _object, _specificText, _specificText2){
       _object.position.y = position * size;
       objectBackground.position.y = position * size;
       _specificText2.position.y = position * size - 2 * size;
-      _specificText.position.y = position * size + 2 * size;
+      _specificText.position.y = position + 2;
     }
     else {
       _object.position.y = (-1) * position * size;
@@ -677,7 +632,7 @@ function createList(_model, _i, _object, _specificText, _specificText2){
   _specificText2.position.x = xShift * size;
   _specificText2.position.z = -22;
   _specificText.position.x = xShift * size + 10 * size;
-  _specificText.position.z = -40;
+  _specificText.position.z = -36;
   _object.position.x = xShift * size - 35 * size;
   _object.position.z = -40;
   objectBackground.position.x = xShift * size;
@@ -707,114 +662,8 @@ var openWatchMenu = function() {
   }
 };
 
-var markerFunction = function(){
-  if(markers[0]) {
-    if (marker0 == false) {
-      marker0 = true;
-      openWatchMenu();
-      quantity = 3;
-      //RIGHTSIDE List with selection
-      for (var j = 0; j < quantity; j++) {
-        if (selectedMode == j) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
-          map: activeSelectionPics[j],
-          transparent: true
-        }));
-        else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
-          map: selectionPics[j],
-          transparent: true
-        }));
-
-        var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[j]);
-
-        var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
-
-        createList(m.model, j, object, specificText, modeText);
-      }
-
-      // LEFTSIDE Batterystatus
-      var batteryGeometry = new THREE.BoxGeometry(10 * size, 30 * size, 1);
-
-      batteryCall = mRobotControl.getBattery();
-
-      if(batteryCall == 0) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0]}));
-      else if(batteryCall < 25) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[1]}));
-      else if (batteryCall < 50) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[2]}));
-      else if (batteryCall < 75) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[3]}));
-      else if (batteryCall < 101) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[4]}));
-      else var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0]}));
-
-      batteryObject.position.x = (xShift * size + 10 * size) * (-1);
-      batteryObject.position.z = -28;
-      m.model.add(batteryObject);
-
-      var canvasBattery = document.createElement('canvas');
-      canvasBattery.width = 1000;
-      canvasBattery.height = 500;
-
-      // draw the score of "cockpit" to the canvas
-      var contextBattery = canvasBattery.getContext('2d');
-      contextBattery.font = "Bold 400px Helvetica";
-      contextBattery.fillStyle = "rgba(255,255,255,0.95)";
-      contextBattery.fillText(batteryCall + '%', 0, 300);
-
-      // use canvas contents as a texture
-      var textureBattery = new THREE.Texture(canvasBattery);
-      textureBattery.needsUpdate = true;
-
-      var materialBattery = new THREE.MeshBasicMaterial({
-        map: textureBattery,
-        transparent: true
-      });
-
-      var batteryBackground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-        color: 0x000000,
-        transparent: true,
-        opacity: 0.75
-      }));
-
-      var batteryText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), materialBattery);
-
-      batteryBackground.position.x = xShift * size * (-1);
-      batteryBackground.position.z = -20;
-      batteryText.position.y = -3 * size;
-      batteryText.position.x = (xShift * size - 30 * size) * (-1);
-      batteryText.position.z = -36;
-
-      m.model.add(batteryBackground);
-      m.model.add(batteryText);
-    }
-  }
-
-  if(markers[64]) {
-    if (marker64 == false) {
-      marker64 = true;
-      openWatchMenu();
-      quantity = 2;
-
-      for (var k = 0; k < quantity; k++) {
-        if (beaconMode == k) var beaconObject = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
-          map: activeBeaconPics[k],
-          transparent: true
-        }));
-        else var beaconObject = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
-          map: beaconPics[k],
-          transparent: true
-        }));
-
-        var beaconSpecificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), beaconTextArray[k]);
-
-        var beaconModeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
-
-        createList(m.model, k, beaconObject, beaconSpecificText, beaconModeText);
-      }
-    }
-  }
-};
-
 var marker0 = false,
     marker64 = false;
-
-var m;
 
 var mainInterval;
 var setMainInterval = function() {
@@ -842,8 +691,10 @@ var setMainInterval = function() {
         currId = 0;
         for (var i = 0; i < id.packetLength; i++ ) {
           currId = (currId << 8) | id.getPacketData(i);
+          //console.log("id[", i, "]=", id.getPacketData(i));
         }
       }
+      //console.log("[add] : ID = " + currId);
       if (!markers[currId]) {
         markers[currId] = {};
       }
@@ -872,15 +723,116 @@ var setMainInterval = function() {
     //Add 3D objects for each detected marker.
     for (i in markers)
     {
-      m = markers[i];
+      var m = markers[i];
 
       if (!m.model) {
         m.model = new THREE.Object3D();
 
         m.model.matrixAutoUpdate = false;
 
-        markerFunction();
+        if(markers[0]) {
+          if (marker0 == false) {
+            marker0 = true;
+            openWatchMenu();
+            quantity = 3;
+            //RIGHTSIDE List with selection
+            for (var j = 0; j < quantity; j++) {
+              if (selectedMode == j) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+                map: activeSelectionPics[j],
+                transparent: true
+              }));
+              else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+                map: selectionPics[j],
+                transparent: true
+              }));
 
+              var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[j]);
+
+              var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
+
+              createList(m.model, j, object, specificText, modeText);
+            }
+
+            // LEFTSIDE Batterystatus
+            var batteryGeometry = new THREE.BoxGeometry(10 * size, 30 * size, 1);
+
+            batteryCall = mRobotControl.getBattery();
+
+            if(batteryCall == 0) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0]}));
+            else if(batteryCall < 25) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[1]}));
+            else if (batteryCall < 50) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[2]}));
+            else if (batteryCall < 75) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[3]}));
+            else if (batteryCall < 101) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[4]}));
+            else var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0]}));
+
+            batteryObject.position.x = (xShift * size + 10 * size) * (-1);
+            batteryObject.position.z = -28;
+            m.model.add(batteryObject);
+
+            var canvasBattery = document.createElement('canvas');
+            canvasBattery.width = 1000;
+            canvasBattery.height = 500;
+
+            // draw the score of "cockpit" to the canvas
+            var contextBattery = canvasBattery.getContext('2d');
+            contextBattery.font = "Bold 400px Helvetica";
+            contextBattery.fillStyle = "rgba(255,255,255,0.95)";
+            contextBattery.fillText(batteryCall + '%', 0, 300);
+
+            // use canvas contents as a texture
+            var textureBattery = new THREE.Texture(canvasBattery);
+            textureBattery.needsUpdate = true;
+
+            var materialBattery = new THREE.MeshBasicMaterial({
+              map: textureBattery,
+              transparent: true
+            });
+
+            var batteryBackground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+              color: 0x000000,
+              transparent: true,
+              opacity: 0.75
+            }));
+
+            var batteryText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), materialBattery);
+
+            batteryBackground.position.x = xShift * size * (-1);
+            batteryBackground.position.z = -20;
+            batteryText.position.y = -3 * size;
+            batteryText.position.x = (xShift * size - 30 * size) * (-1);
+            batteryText.position.z = -36;
+
+            m.model.add(batteryBackground);
+            m.model.add(batteryText);
+          }
+        }
+
+        if(markers[64]) {
+          if (marker64 == false) {
+            marker64 = true;
+            openWatchMenu();
+            quantity = 2;
+
+            for (var k = 0; k < quantity; k++) {
+              if (beaconMode == k) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+                map: activeBeaconPics[k],
+                transparent: true
+              }));
+              else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+                map: beaconPics[k],
+                transparent: true
+              }));
+
+              // Todo : insert ARRAY
+
+              var beaconSpecificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), beaconTextArray[k]);
+
+              var beaconModeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), beaconMaterialMode);
+
+              createList(m.model, k, object, beaconSpecificText, beaconModeText);
+            }
+          }
+        }
         setSelectPosition(m.model);
 
         scene.add(m.model);
@@ -932,7 +884,7 @@ var mRobotControl = {
   startBattery: function(){
     setInterval(function(){
       mRobot.control.readBatteryPercentage();
-    },5000); // read battery every 5 seconds
+    },60000); // read battery every minute
   },
 
   getBattery: function(){
@@ -976,10 +928,10 @@ angular.module('starter', ['ionic', 'ngCordova'])
 
       ionic.Platform.fullScreen();
       /*
-      if(window.StatusBar) {
-        StatusBar.styleDefault();
-      }
-      */
+       if(window.StatusBar) {
+       StatusBar.styleDefault();
+       }
+       */
       if (navigator.splashscreen) {
         navigator.splashscreen.hide();
       }

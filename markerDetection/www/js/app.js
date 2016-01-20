@@ -537,8 +537,10 @@ var onDataReceivedHandler = function(messageString){
             case 2:
               watchConnection.watch.sendMessage("cockpit");
               clearInterval(mainInterval);
-              mRobotControl.requestDriveControl();
-              mRobotControl.startWatching();
+              setTimeout(function(){
+                mRobotControl.requestDriveControl();
+                mRobotControl.startWatching();
+              },3000);
               var webcamLeftGL = $("#left").hide();
               var webcamRightGL = $("#right").hide();
               var imgLeft = document.createElement('img');
