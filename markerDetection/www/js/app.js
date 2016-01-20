@@ -522,6 +522,7 @@ var onDataReceivedHandler = function(messageString){
                   }
                   break;
             case "tap":
+              // Todo : beaconMode einstellen
               if(marker0 == true) selectedMode = selectCounter;
               if(marker64 == true) beaconMode = selectCounter;
               // Todo : Listupdate for icons
