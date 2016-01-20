@@ -14,8 +14,6 @@
  * Date:    17.01.2015
  */
 
-// TEST
-
 //=======================================
 
 var TIMER_INTERVAL_RENDERING = 50;
@@ -283,6 +281,9 @@ videoScene.add(videoCam);
 
 // TESTAREA START
 var textArray = [];
+
+// Todo : canvas Größe anpassen
+
 // create canvas
 var canvasMode = document.createElement('canvas');
 canvasMode.width = 550;
@@ -732,21 +733,21 @@ var setMainInterval = function() {
             openWatchMenu();
             quantity = 3;
             //RIGHTSIDE List with selection
-            for (var i = 0; i < quantity; i++) {
-              if (selectedMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
-                map: activeSelectionPics[i],
+            for (var j = 0; j < quantity; j++) {
+              if (selectedMode == j) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+                map: activeSelectionPics[j],
                 transparent: true
               }));
               else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
-                map: selectionPics[i],
+                map: selectionPics[j],
                 transparent: true
               }));
 
-              var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[i]);
+              var specificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), textArray[j]);
 
               var modeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
 
-              createList(m.model, i, object, specificText, modeText);
+              createList(m.model, j, object, specificText, modeText);
             }
 
             // LEFTSIDE Batterystatus
@@ -809,23 +810,23 @@ var setMainInterval = function() {
             openWatchMenu();
             quantity = 2;
 
-            for (var i = 0; i < quantity; i++) {
-              if (beaconMode == i) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
-                map: activeBeaconPics[i],
+            for (var k = 0; k < quantity; k++) {
+              if (beaconMode == k) var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
+                map: activeBeaconPics[k],
                 transparent: true
               }));
               else var object = new THREE.Mesh(new THREE.BoxGeometry(20 * size, 20 * size, 1), new THREE.MeshBasicMaterial({
-                map: beaconPics[i],
+                map: beaconPics[k],
                 transparent: true
               }));
 
               // Todo : insert ARRAY
 
-              var beaconSpecificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), beaconTextArray[i]);
+              var beaconSpecificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), beaconTextArray[k]);
 
               var beaconModeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), beaconMaterialMode);
 
-              createList(m.model, i, object, beaconSpecificText, beaconModeText);
+              createList(m.model, k, object, beaconSpecificText, beaconModeText);
             }
           }
         }
