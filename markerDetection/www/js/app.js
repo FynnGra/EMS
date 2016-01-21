@@ -806,8 +806,9 @@ var setMainInterval = function() {
 
             batteryCall = mRobotControl.getBattery();
 
-            if(batteryCall == 0) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0]}));
-            else if(batteryCall < 25) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[1]}));
+            /*if(batteryCall == 0) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[0]}));
+            else*/
+            if(batteryCall < 25) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[1]}));
             else if (batteryCall < 50) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[2]}));
             else if (batteryCall < 75) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[3]}));
             else if (batteryCall < 101) var batteryObject = new THREE.Mesh(batteryGeometry, new THREE.MeshBasicMaterial({map: batteryState[4]}));
@@ -932,7 +933,7 @@ var mRobotControl = {
   startBattery: function(){
     setInterval(function(){
       mRobot.control.readBatteryPercentage();
-    },60000); // read battery every minute
+    },5000); // read battery every minute
   },
 
   getBattery: function(){
