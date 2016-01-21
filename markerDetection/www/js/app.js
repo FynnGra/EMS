@@ -281,6 +281,50 @@ videoScene.add(videoCam);
 
 // TESTAREA START
 var textArray = [];
+var beaconTextArray = [];
+
+// create canvas
+var beaconMode = document.createElement('canvas');
+beaconMode.width = 1000;
+beaconMode.height = 500;
+
+// draw the score of "mode" to the canvas
+var beaconContextMode = beaconMode.getContext('2d');
+beaconContextMode.font = "Bold 200px Helvetica";
+beaconContextMode.fillStyle = "rgba(255,255,255,0.95)";
+beaconContextMode.fillText('allow', 0, 300);
+
+// use canvas contents as a texture
+var beaconTextureMode = new THREE.Texture(beaconMode);
+beaconTextureMode.needsUpdate = true;
+
+var beaconMaterialMode = new THREE.MeshBasicMaterial( {
+  map: beaconTextureMode,
+  transparent: true
+} );
+
+// create canvas
+var beaconMode2 = document.createElement('canvas');
+beaconMode2.width = 1000 ;
+beaconMode2.height = 500;
+
+// draw the score of "mode" to the canvas
+var beaconContextMode2 = beaconMode2.getContext('2d');
+beaconContextMode2.font = "Bold 200px Helvetica";
+beaconContextMode2.fillStyle = "rgba(255,255,255,0.95)";
+beaconContextMode2.fillText('deny', 0, 300);
+
+// use canvas contents as a texture
+var beaconTextureMode2 = new THREE.Texture(beaconMode2);
+beaconTextureMode2.needsUpdate = true;
+
+var beaconMaterialMode2 = new THREE.MeshBasicMaterial( {
+  map: beaconTextureMode2,
+  transparent: true
+} );
+
+beaconTextArray.push(beaconMaterialMode);
+beaconTextArray.push(beaconMaterialMode2);
 
 // Todo : canvas Größe anpassen
 
@@ -371,7 +415,7 @@ textArray.push(materialCockpit);
 //Array for the detected markers.
 var markers = {};
 
-var size = 3;
+var size = 2.5;
 
 var quantity,
     position,
@@ -523,38 +567,42 @@ var onDataReceivedHandler = function(messageString){
           break;
         case "tap":
           // Todo : beaconMode einstellen
-          if(marker0 == true) selectedMode = selectCounter;
-          if(marker64 == true) beaconMode = selectCounter;
-          // Todo : Listupdate for icons
-          switch (selectCounter) {
-            case 0:
-              watchConnection.watch.sendMessage("auto");
-              mRobotControl.startAutoDrive();
-              break;
-            case 1:
-              watchConnection.watch.sendMessage("joystick");
-              break;
-            case 2:
-              watchConnection.watch.sendMessage("cockpit");
-              clearInterval(mainInterval);
-              setTimeout(function(){
-                mRobotControl.requestDriveControl();
-                mRobotControl.startWatching();
-              },3000);
-              var webcamLeftGL = $("#left").hide();
-              var webcamRightGL = $("#right").hide();
-              var imgLeft = document.createElement('img');
-              var imgRight = document.createElement('img');
-              imgLeft.src = "http://192.168.0.11:9000/?action=stream";
-              imgRight.src = "http://192.168.0.11:9000/?action=stream";
-              $(imgLeft).css("margin-top","10%");
-              $(imgRight).css("margin-top","10%");
-              var div = document.getElementById("main");
-              div.appendChild(imgLeft);
-              div.appendChild(imgRight);
-              cockpitOpened = true;
-              //cordova.InAppBrowser.open('http://192.168.0.11/srv/MarkerdetektRobot/index.html', '_blank', 'location=no');
-              break;
+          if(marker64 == true) selectedMode = selectCounter;
+          if(marker0 == true){
+            beaconMode = selectCounter;
+
+
+            // Todo : Listupdate for icons
+            switch(selectCounter){
+              case 0:
+                watchConnection.watch.sendMessage("auto");
+                mRobotControl.startAutoDrive();
+                break;
+              case 1:
+                watchConnection.watch.sendMessage("joystick");
+                break;
+              case 2:
+                watchConnection.watch.sendMessage("cockpit");
+                clearInterval(mainInterval);
+                setTimeout(function(){
+                  mRobotControl.requestDriveControl();
+                  mRobotControl.startWatching();
+                }, 3000);
+                var webcamLeftGL = $("#left").hide();
+                var webcamRightGL = $("#right").hide();
+                var imgLeft = document.createElement('img');
+                var imgRight = document.createElement('img');
+                imgLeft.src = "http://192.168.0.11:9000/?action=stream";
+                imgRight.src = "http://192.168.0.11:9000/?action=stream";
+                $(imgLeft).css("margin-top", "10%");
+                $(imgRight).css("margin-top", "10%");
+                var div = document.getElementById("main");
+                div.appendChild(imgLeft);
+                div.appendChild(imgRight);
+                cockpitOpened = true;
+                //cordova.InAppBrowser.open('http://192.168.0.11/srv/MarkerdetektRobot/index.html', '_blank', 'location=no');
+                break;
+            }
           }
       }
       break;
@@ -632,7 +680,7 @@ function createList(_model, _i, _object, _specificText, _specificText2){
   _specificText2.position.x = xShift * size;
   _specificText2.position.z = -22;
   _specificText.position.x = xShift * size + 10 * size;
-  _specificText.position.z = -36;
+  _specificText.position.z = -40;
   _object.position.x = xShift * size - 35 * size;
   _object.position.z = -40;
   objectBackground.position.x = xShift * size;
@@ -827,7 +875,7 @@ var setMainInterval = function() {
 
               var beaconSpecificText = new THREE.Mesh(new THREE.BoxGeometry(50 * size, 20 * size, 1), beaconTextArray[k]);
 
-              var beaconModeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), beaconMaterialMode);
+              var beaconModeText = new THREE.Mesh(new THREE.BoxGeometry(30 * size, 10 * size, 1), materialMode);
 
               createList(m.model, k, object, beaconSpecificText, beaconModeText);
             }
