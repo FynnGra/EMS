@@ -95,61 +95,55 @@ mRobot.control.driveRobot = function (speed, direction) {
 /* ---------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 mRobot.control.calculation = function (speedData, directionData) {
-    // set current data
-    directionData = directionData * 10 * (-1); // direction
-    speedData = speedData * 10; // acceleration
+  // set current data
+  directionData = directionData * 10; // direction
+  speedData = speedData * 10; // acceleration
 
-    // cut high/low values
-    if (directionData > 100) directionData = 100;
-    if (speedData > 100) speedData = 100;
-    if (directionData < -100) directionData = -100;
-    if (speedData < -100) speedData = -100;
+  // cut high/low values
+  if (directionData > 100) directionData = 100;
+  if (speedData > 100) speedData = 100;
+  if (directionData < -100) directionData = -100;
+  if (speedData < -100) speedData = -100;
 
-    var xValue = directionData;
-    var yValue = speedData;
+  var xValue = directionData;
+  var yValue = speedData;
 
-    // vector length
-    var speedCalculated = Math.sqrt((xValue * xValue + (yValue * yValue)));
-    if (yValue < 0) {
-        speedCalculated *= -1;
-    }
+  // vector length
+  var speedCalculated = Math.sqrt((xValue * xValue + (yValue * yValue)));
+  if (yValue < 0) {
+    speedCalculated *= -1; // negative vector length to drive backwards
+  }
 
-    // angle
-    var directionCalculated = Math.atan(yValue / xValue) * (180 / Math.PI); // degrees
+  // angle
+  var directionCalculated = Math.atan(yValue / xValue) * (180 / Math.PI); // degrees
 
-    // arcus correction
-    if (xValue < 0) {
-        directionCalculated += 180;
-    } else if (yValue < 0 && xValue >= 0) {
-        directionCalculated += 360;
-    }
+  // arcus correction
+  if (xValue < 0) {
+    directionCalculated += 180;
+  } else if (yValue < 0 && xValue >= 0) {
+    directionCalculated += 360;
+  }
 
-    // 0 degree start on positive y-axis
-    if (directionCalculated > 270) {
-        directionCalculated -= 270;
-    } else {
-        directionCalculated += 90;
-    }
+  // 0 degree start on positive y-axis
+  if (directionCalculated > 270) {
+    directionCalculated -= 270;
+  } else {
+    directionCalculated += 90;
+  }
 
-    // angle to direction
-    if (directionCalculated < 90 && directionCalculated >= 0) {
-        directionCalculated *= 1.25;
-    } else if (directionCalculated > 90 && directionCalculated < 270) {
-        directionCalculated = (directionCalculated - 180) * (-1.25);
-    } else if (directionCalculated > 270) {
-        directionCalculated = (directionCalculated - 360) * 1.25;
-    }/* else if (directionCalculated >= 80 && directionCalculated <= 100) {
-        directionCalculated = Math.abs((directionCalculated - 270)) * (-10);
-        speedCalculated = (speedCalculated / 100) * directionCalculated;
-    } else if (directionCalculated >= 260 && directionCalculated <= 280) {
-        directionCalculated = Math.abs((directionCalculated - 270) * 10);
-        speedCalculated = (speedCalculated / 100) * directionCalculated;
-    }*/
+  // angle to direction
+  if (directionCalculated < 90 && directionCalculated >= 0) { // quadrant I
+    directionCalculated *= 1.25; // multiplied by 1.25 to raise the maximum direction value from 90 to 100
+  } else if (directionCalculated > 90 && directionCalculated < 270) { // quadrant II and III
+    directionCalculated = (directionCalculated - 180) * (-1.25); // PI (180°) is subtracted because of the behaviour of the arctan function, negative to invert backward direction
+  } else if (directionCalculated > 270) { // quadrant IV
+    directionCalculated = (directionCalculated - 360) * 1.25; // 2*PI (360°) subracted
+  }
 
-    return {
-        speed: speedCalculated,
-        direction: directionCalculated
-    }
+  return {
+    speed: speedCalculated,
+    direction: directionCalculated
+  }
 };
 
 /* ---------------------------------------------------------------------------------------------------------------------------------------------------- */
