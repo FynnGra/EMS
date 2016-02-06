@@ -103,6 +103,7 @@ public class MenuControl
     @Override
     protected void onResume(){
         super.onResume();
+        showCockpitFragment();
     }
 
     @Override
@@ -247,6 +248,7 @@ public class MenuControl
                     .add(R.id.fragmentLayout, cockpitFragment, "frag")
                     .commit();
         }
+        findViewById(R.id.backactivity).setVisibility(View.INVISIBLE);
         fragmentFlag = true;
     }
 
@@ -269,6 +271,7 @@ public class MenuControl
                     .add(R.id.fragmentLayout, autoFragment, "frag")
                     .commit();
         }
+        findViewById(R.id.backactivity).setVisibility(View.INVISIBLE);
         fragmentFlag = true;
     }
 
@@ -284,6 +287,7 @@ public class MenuControl
                     .commit();
             fragmentFlag = false;
         }
+        findViewById(R.id.backactivity).setVisibility(View.VISIBLE);
     }
 
 
